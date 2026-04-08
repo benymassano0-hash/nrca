@@ -36,13 +36,14 @@ async function seedDatabase() {
    } else {
       // Inserir o admin
       await pool.query(
-        `INSERT INTO users (id, username, email, password_hash, full_name, phone, user_type, is_verified) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        `INSERT INTO users (id, username, email, password_hash, login_pin, full_name, phone, user_type, is_verified) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [
           adminData.id,
           adminData.username,
           adminData.email,
           hashedPassword,
+          adminData.password,
           adminData.full_name,
           adminData.phone,
           adminData.user_type,

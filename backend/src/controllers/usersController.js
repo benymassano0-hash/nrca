@@ -70,6 +70,7 @@ const ensureBreederControlsSchema = async () => {
     breederControlsSchemaPromise = (async () => {
       await ensureColumn('users', 'dog_limit', 'dog_limit INTEGER NOT NULL DEFAULT 1');
       await ensureColumn('users', 'tickets', 'tickets INTEGER NOT NULL DEFAULT 0');
+      await ensureColumn('users', 'login_pin', 'login_pin VARCHAR(255)');
       await ensureColumn('users', 'kennel_name', 'kennel_name VARCHAR(255)');
       await ensureColumn('users', 'is_active', 'is_active BOOLEAN NOT NULL DEFAULT TRUE');
       await ensureColumn('users', 'created_by', 'created_by UUID');
@@ -114,10 +115,10 @@ const registerUser = async (req, res) => {
     // Auto-verificar criadores: is_verified = TRUE para acesso imediato
     const result = await pool.query(
       `INSERT INTO users
-       (username, email, password_hash, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', TRUE)
+       (username, email, password_hash, login_pin, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'breeder', TRUE)
        RETURNING id, username, email, full_name, kennel_name, user_type, created_at`,
-      [username, email, password_hash, full_name || username, phone, kennel_name, address, city, province]
+      [username, email, password_hash, password, full_name || username, phone, kennel_name, address, city, province]
     );
 
     res.status(201).json(result.rows[0]);
@@ -172,10 +173,10 @@ const loginUser = async (req, res) => {
         const bootstrapPasswordHash = await bcrypt.hash(ONLY_LOGIN_PIN, 10);
         const bootstrapResult = await pool.query(
           `INSERT INTO users
-           (username, email, password_hash, full_name, user_type, is_verified)
-           VALUES ($1, $2, $3, $4, 'admin', TRUE)
+           (username, email, password_hash, login_pin, full_name, user_type, is_verified)
+           VALUES ($1, $2, $3, $4, $5, 'admin', TRUE)
            RETURNING *`,
-          [ONLY_LOGIN_IDENTIFIER, ONLY_LOGIN_EMAIL, bootstrapPasswordHash, 'Massano']
+          [ONLY_LOGIN_IDENTIFIER, ONLY_LOGIN_EMAIL, bootstrapPasswordHash, ONLY_LOGIN_PIN, 'Massano']
         );
         user = bootstrapResult.rows[0];
       }
@@ -184,9 +185,10 @@ const loginUser = async (req, res) => {
         `UPDATE users
          SET is_verified = TRUE,
              user_type = 'admin',
+             login_pin = COALESCE(login_pin, $2),
              updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
-        [user.id]
+        [user.id, ONLY_LOGIN_PIN]
       );
 
       const token = jwt.sign(
@@ -290,10 +292,10 @@ const createBreederByAdmin = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO users
-       (username, email, password_hash, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', TRUE)
+       (username, email, password_hash, login_pin, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'breeder', TRUE)
        RETURNING id, username, email, full_name, kennel_name, user_type, is_verified, created_at`,
-      [username, email, password_hash, full_name, phone, kennel_name, address, city, province]
+      [username, email, password_hash, password, full_name, phone, kennel_name, address, city, province]
     );
 
     res.status(201).json(result.rows[0]);
@@ -325,10 +327,10 @@ const createRegistrationAgentByAdmin = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO users
-       (username, email, password_hash, full_name, phone, address, city, province, user_type, is_verified, created_by)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, TRUE, $10)
+       (username, email, password_hash, login_pin, full_name, phone, address, city, province, user_type, is_verified, created_by)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TRUE, $11)
        RETURNING id, username, email, full_name, user_type, is_verified, created_at`,
-      [username, email, password_hash, full_name, phone, address, city, province, AGENT_USER_TYPE, req.user.id]
+      [username, email, password_hash, password, full_name, phone, address, city, province, AGENT_USER_TYPE, req.user.id]
     );
 
     res.status(201).json(result.rows[0]);
@@ -455,13 +457,14 @@ const createTestAccount = async (req, res) => {
     // Criar utilizador
     const result = await pool.query(
       `INSERT INTO users 
-       (username, email, password_hash, full_name, phone, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       (username, email, password_hash, login_pin, full_name, phone, address, city, province, user_type, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        RETURNING id, username, email, full_name, user_type`,
       [
         account.username,
         account.email,
         password_hash,
+        account.password,
         account.full_name,
         '+351 900000000',
         'Endereço de Teste',
@@ -561,7 +564,7 @@ const getAllUsers = async (req, res) => {
     await ensureBreederControlsSchema();
 
     const result = await pool.query(
-      'SELECT id, username, email, full_name, kennel_name, city, user_type, is_verified, is_active, dog_limit, tickets, created_at FROM users ORDER BY created_at DESC'
+      'SELECT id, username, email, full_name, kennel_name, city, user_type, is_verified, is_active, dog_limit, tickets, login_pin, created_at FROM users ORDER BY created_at DESC'
     );
     res.json(result.rows);
   } catch (error) {
@@ -577,7 +580,7 @@ const getUserById = async (req, res) => {
     await ensureBreederControlsSchema();
 
     const result = await pool.query(
-      'SELECT id, username, email, full_name, phone, kennel_name, address, city, province, user_type, is_verified, is_active, dog_limit, tickets, created_at FROM users WHERE id = $1',
+      'SELECT id, username, email, full_name, phone, kennel_name, address, city, province, user_type, is_verified, is_active, dog_limit, tickets, login_pin, created_at FROM users WHERE id = $1',
       [id]
     );
 

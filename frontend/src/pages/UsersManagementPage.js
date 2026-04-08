@@ -307,11 +307,12 @@ function UsersManagementPage() {
   };
 
   const exportToCSV = () => {
-    const headers = ['ID', 'Username', 'Email', 'Nome Completo', 'Tipo', 'Telefone', 'Cidade', 'Verificado', 'Data Registo'];
+    const headers = ['ID', 'Username', 'Email', 'PIN', 'Nome Completo', 'Tipo', 'Telefone', 'Cidade', 'Verificado', 'Data Registo'];
     const rows = users.map(user => [
       user.id,
       user.username,
       user.email,
+      user.login_pin || '-',
       user.full_name || '-',
       user.user_type,
       user.phone || '-',
@@ -593,6 +594,7 @@ function UsersManagementPage() {
                 <th>Nº</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>PIN</th>
                 <th>Nome Completo</th>
                 <th>Canil</th>
                 <th>Tipo</th>
@@ -617,6 +619,7 @@ function UsersManagementPage() {
                     <strong>{user.username}</strong>
                   </td>
                   <td>{user.email}</td>
+                  <td>{user.login_pin || '-'}</td>
                   <td>{user.full_name || '-'}</td>
                   <td>{user.kennel_name || '-'}</td>
                   <td>
@@ -715,6 +718,10 @@ function UsersManagementPage() {
                 <div className="info-item">
                   <label>📧 Email:</label>
                   <span>{selectedUser.email}</span>
+                </div>
+                <div className="info-item">
+                  <label>🔑 PIN:</label>
+                  <span>{selectedUser.login_pin || '-'}</span>
                 </div>
                 <div className="info-item">
                   <label>📱 Telefone:</label>
