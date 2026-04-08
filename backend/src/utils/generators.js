@@ -8,18 +8,22 @@ const generateRegistrationId = async (breed, pool) => {
   const day = date.getDate().toString().padStart(2, '0');
   
   const prefix = `REG-${year}${month}${day}`;
-  
-  // Contar quantos cães foram registados hoje
+
+  // Buscar o maior número já emitido hoje para evitar colisões após eliminações.
   const result = await pool.query(
-    `SELECT COUNT(*) FROM dogs 
-     WHERE registration_id LIKE $1`,
+    `SELECT registration_id
+     FROM dogs
+     WHERE registration_id LIKE $1
+     ORDER BY registration_id DESC
+     LIMIT 1`,
     [`${prefix}%`]
   );
 
-  const firstRow = result.rows[0] || {};
-  const rawCount = firstRow.count !== undefined ? firstRow.count : Object.values(firstRow)[0] || 0;
-  const count = parseInt(rawCount, 10) + 1;
-  const sequence = count.toString().padStart(4, '0');
+  const latestRegistrationId = result.rows[0]?.registration_id || result.rows[0]?.REGISTRATION_ID || Object.values(result.rows[0] || {})[0] || null;
+  const latestSequence = latestRegistrationId
+    ? parseInt(String(latestRegistrationId).split('-').pop(), 10) || 0
+    : 0;
+  const sequence = String(latestSequence + 1).padStart(4, '0');
   
   return `${prefix}-${sequence}`;
 };
