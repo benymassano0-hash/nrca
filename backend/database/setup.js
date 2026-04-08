@@ -31,7 +31,7 @@ const queries = `
     province VARCHAR(100),
     dog_limit INTEGER NOT NULL DEFAULT 1,
     tickets INTEGER NOT NULL DEFAULT 0,
-    user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('breeder', 'admin', 'viewer')),
+    user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('breeder', 'admin', 'viewer', 'registration_agent')),
     is_verified BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
     created_by UUID,

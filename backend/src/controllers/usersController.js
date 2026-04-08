@@ -111,11 +111,11 @@ const registerUser = async (req, res) => {
 
     const password_hash = await bcrypt.hash(password, 10);
 
-    // Auto-verificar criadores: is_verified = 1 para acesso imediato
+    // Auto-verificar criadores: is_verified = TRUE para acesso imediato
     const result = await pool.query(
       `INSERT INTO users
        (username, email, password_hash, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', 1)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', TRUE)
        RETURNING id, username, email, full_name, kennel_name, user_type, created_at`,
       [username, email, password_hash, full_name || username, phone, kennel_name, address, city, province]
     );
@@ -173,7 +173,7 @@ const loginUser = async (req, res) => {
         const bootstrapResult = await pool.query(
           `INSERT INTO users
            (username, email, password_hash, full_name, user_type, is_verified)
-           VALUES ($1, $2, $3, $4, 'admin', 1)
+           VALUES ($1, $2, $3, $4, 'admin', TRUE)
            RETURNING *`,
           [ONLY_LOGIN_IDENTIFIER, ONLY_LOGIN_EMAIL, bootstrapPasswordHash, 'Massano']
         );
@@ -182,7 +182,7 @@ const loginUser = async (req, res) => {
 
       await pool.query(
         `UPDATE users
-         SET is_verified = 1,
+         SET is_verified = TRUE,
              user_type = 'admin',
              updated_at = CURRENT_TIMESTAMP
          WHERE id = $1`,
@@ -291,7 +291,7 @@ const createBreederByAdmin = async (req, res) => {
     const result = await pool.query(
       `INSERT INTO users
        (username, email, password_hash, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', 1)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'breeder', TRUE)
        RETURNING id, username, email, full_name, kennel_name, user_type, is_verified, created_at`,
       [username, email, password_hash, full_name, phone, kennel_name, address, city, province]
     );
@@ -326,7 +326,7 @@ const createRegistrationAgentByAdmin = async (req, res) => {
     const result = await pool.query(
       `INSERT INTO users
        (username, email, password_hash, full_name, phone, address, city, province, user_type, is_verified, created_by)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, $10)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, TRUE, $10)
        RETURNING id, username, email, full_name, user_type, is_verified, created_at`,
       [username, email, password_hash, full_name, phone, address, city, province, AGENT_USER_TYPE, req.user.id]
     );
@@ -348,7 +348,7 @@ const getAgentsMonthlyStats = async (req, res) => {
       `SELECT creator.id as agent_id,
               creator.username as agent_username,
               creator.full_name as agent_full_name,
-              strftime('%Y-%m', u.created_at) as month,
+              TO_CHAR(u.created_at, 'YYYY-MM') as month,
               COUNT(*) as registrations
        FROM users u
        JOIN users creator ON u.created_by = creator.id
@@ -369,7 +369,7 @@ const getAgentsMonthlyStats = async (req, res) => {
 const getMyMonthlyStats = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT strftime('%Y-%m', created_at) as month,
+      `SELECT TO_CHAR(created_at, 'YYYY-MM') as month,
               COUNT(*) as registrations
        FROM users
        WHERE created_by = $1
