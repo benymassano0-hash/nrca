@@ -2,10 +2,10 @@ const pool = require('../../database/pool');
 
 let breederCommercialSchemaPromise;
 const ensureColumn = async (tableName, columnName, columnDefinition) => {
-  const tableInfo = await pool.query(`PRAGMA table_info(${tableName})`);
-  const exists = tableInfo.rows.some((row) => row.name === columnName);
-  if (!exists) {
-    await pool.query(`ALTER TABLE ${tableName} ADD COLUMN ${columnDefinition}`);
+  try {
+    await pool.query(`ALTER TABLE ${tableName} ADD COLUMN IF NOT EXISTS ${columnDefinition}`);
+  } catch (e) {
+    // coluna já existe ou erro ignorável
   }
 };
 

@@ -11,25 +11,10 @@ if (!fs.existsSync(qrDir)) {
 
 let breederCommercialSchemaPromise;
 const ensureColumn = async (tableName, columnName, columnDefinition) => {
-  let exists = false;
-
   try {
-    const tableInfo = await pool.query(`PRAGMA table_info(${tableName})`);
-    exists = tableInfo.rows.some((row) => row.name === columnName);
-  } catch (_) {
-    const pgInfo = await pool.query(
-      `SELECT 1
-       FROM information_schema.columns
-       WHERE table_name = $1
-         AND column_name = $2
-       LIMIT 1`,
-      [tableName, columnName]
-    );
-    exists = pgInfo.rows.length > 0;
-  }
-
-  if (!exists) {
-    await pool.query(`ALTER TABLE ${tableName} ADD COLUMN ${columnDefinition}`);
+    await pool.query(`ALTER TABLE ${tableName} ADD COLUMN IF NOT EXISTS ${columnDefinition}`);
+  } catch (e) {
+    // coluna já existe ou erro ignorável
   }
 };
 
