@@ -1077,6 +1077,7 @@ const deleteUserByAdmin = async (req, res) => {
 
     await runOptional('DELETE FROM events WHERE creator_id = $1', [id]);
     await runOptional('DELETE FROM breeder_ticket_transactions WHERE breeder_id = $1 OR created_by = $1', [id]);
+    await runOptional('DELETE FROM breeder_wallet_transactions WHERE breeder_id = $1 OR created_by = $1', [id]);
     await runOptional('DELETE FROM kennel_partnerships WHERE requester_id = $1 OR addressee_id = $1', [id]);
 
     // Limpar referências opcionais para evitar bloqueio da FK na tabela users.
