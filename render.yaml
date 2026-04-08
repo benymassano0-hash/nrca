@@ -1,6 +1,7 @@
 services:
   - type: web
     name: rcna
+    plan: free
     runtime: node
     rootDir: .
     autoDeploy: true
