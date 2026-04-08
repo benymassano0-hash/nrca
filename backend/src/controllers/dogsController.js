@@ -437,11 +437,9 @@ const updateDog = async (req, res) => {
            mother_id = COALESCE($8, mother_id),
            health_status = COALESCE($9, health_status),
            notes = COALESCE($10, notes),
-             photo_url = COALESCE($11, photo_url),
+           photo_url = COALESCE($11, photo_url),
            updated_at = CURRENT_TIMESTAMP
            WHERE id = $12`,
-      [name, breed_id, birth_date, gender, color, microchip_id, 
-           father_id, mother_id, health_status, notes, photo_url, id]
       [name, breed_id, normalizedBirthDate, gender, normalizedColor, normalizedMicrochipId, 
        normalizedFatherId, normalizedMotherId, normalizedHealthStatus, normalizedNotes, photo_url, id]
     );

@@ -1,5 +1,31 @@
 const pool = require('../../database/pool');
 
+let vaccinesSchemaPromise;
+const ensureVaccinesSchema = async () => {
+  if (!vaccinesSchemaPromise) {
+    vaccinesSchemaPromise = (async () => {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dog_vaccines (
+          id SERIAL PRIMARY KEY,
+          dog_id UUID NOT NULL REFERENCES dogs(id) ON DELETE CASCADE,
+          vaccine_name VARCHAR(255) NOT NULL,
+          vaccine_date DATE NOT NULL,
+          next_due_date DATE,
+          veterinarian_name VARCHAR(255),
+          notes TEXT,
+          created_by UUID REFERENCES users(id),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+    })().catch((error) => {
+      vaccinesSchemaPromise = null;
+      throw error;
+    });
+  }
+
+  await vaccinesSchemaPromise;
+};
+
 const canAccessDog = async (user, dogId) => {
   const dogResult = await pool.query(
     'SELECT id, breeder_id, owner_id FROM dogs WHERE id = $1',
@@ -25,6 +51,7 @@ const getVaccinesByDog = async (req, res) => {
   const { dog_id } = req.params;
 
   try {
+    await ensureVaccinesSchema();
     const access = await canAccessDog(req.user, dog_id);
     if (!access.allowed) {
       return res.status(access.status).json({ error: access.error });
@@ -63,6 +90,7 @@ const createVaccine = async (req, res) => {
   }
 
   try {
+    await ensureVaccinesSchema();
     const access = await canAccessDog(req.user, dog_id);
     if (!access.allowed) {
       return res.status(access.status).json({ error: access.error });
