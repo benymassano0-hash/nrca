@@ -79,7 +79,7 @@ function PublicPedigreeSearchPage() {
         <img
           src={getPhotoUrl(photoUrl)}
           alt={name || 'Cão'}
-          className="public-pedigree-photo"
+          className={`public-pedigree-photo ${isMain ? 'main-photo' : ''}`}
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
@@ -103,13 +103,25 @@ function PublicPedigreeSearchPage() {
 
         <div className="public-pedigree-meta-card">
           <h4>Tabela de 4 gerações</h4>
-          <div className="public-pedigree-meta-grid">
-            <p><strong>Nome:</strong> {dog.name || 'N/A'}</p>
-            <p><strong>Registo:</strong> {dog.registration_id || 'N/A'}</p>
-            <p><strong>Raça:</strong> {dog.breed_name || 'N/A'}</p>
-            <p><strong>Género:</strong> {dog.gender === 'M' ? 'Macho' : dog.gender === 'F' ? 'Fêmea' : 'N/A'}</p>
-            <p><strong>Nascimento:</strong> {dog.birth_date ? new Date(dog.birth_date).toLocaleDateString('pt-PT') : 'N/A'}</p>
-            <p><strong>Criador:</strong> {dog.breeder_name || 'N/A'}</p>
+          <div className="public-pedigree-hero">
+            {dog.photo_url && (
+              <img
+                src={getPhotoUrl(dog.photo_url)}
+                alt={`Foto de ${dog.name}`}
+                className="public-pedigree-hero-photo"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            )}
+            <div className="public-pedigree-meta-grid">
+              <p><strong>Nome:</strong> {dog.name || 'N/A'}</p>
+              <p><strong>Registo:</strong> {dog.registration_id || 'N/A'}</p>
+              <p><strong>Raça:</strong> {dog.breed_name || 'N/A'}</p>
+              <p><strong>Género:</strong> {dog.gender === 'M' ? 'Macho' : dog.gender === 'F' ? 'Fêmea' : 'N/A'}</p>
+              <p><strong>Nascimento:</strong> {dog.birth_date ? new Date(dog.birth_date).toLocaleDateString('pt-PT') : 'N/A'}</p>
+              <p><strong>Criador:</strong> {dog.breeder_name || 'N/A'}</p>
+            </div>
           </div>
         </div>
 
