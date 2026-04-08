@@ -966,23 +966,125 @@ const updateUserByAdmin = async (req, res) => {
 // Eliminar utilizador (apenas admin)
 const deleteUserByAdmin = async (req, res) => {
   const { id } = req.params;
+  const client = await pool.connect();
+
+  const runOptional = async (sql, params = []) => {
+    try {
+      await client.query(sql, params);
+    } catch (err) {
+      // Tabelas opcionais podem não existir em alguns ambientes.
+      if (err && err.code === '42P01') return;
+      throw err;
+    }
+  };
 
   try {
+    await client.query('BEGIN');
+
     if (req.user && req.user.id === id) {
+      await client.query('ROLLBACK');
       return res.status(400).json({ error: 'Não pode eliminar a própria conta' });
     }
 
-    const userResult = await pool.query(
+    const userResult = await client.query(
       'SELECT id, username, user_type FROM users WHERE id = $1',
       [id]
     );
 
     if (!userResult.rows.length) {
+      await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Utilizador não encontrado' });
     }
 
     const target = userResult.rows[0];
-    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+
+    // Descobrir cães associados (como criador ou proprietário).
+    const dogIdsResult = await client.query(
+      `SELECT id
+       FROM dogs
+       WHERE breeder_id = $1 OR owner_id = $1`,
+      [id]
+    );
+    const dogIds = dogIdsResult.rows.map((row) => row.id);
+
+    if (dogIds.length > 0) {
+      await runOptional(
+        `DELETE FROM breedings
+         WHERE breeder_id = $1
+            OR father_id = ANY($2::uuid[])
+            OR mother_id = ANY($2::uuid[])`,
+        [id, dogIds]
+      );
+
+      await runOptional(
+        `DELETE FROM pedigrees
+         WHERE dog_id = ANY($1::uuid[])
+            OR father_id = ANY($1::uuid[])
+            OR mother_id = ANY($1::uuid[])
+            OR paternal_grandfather_id = ANY($1::uuid[])
+            OR paternal_grandmother_id = ANY($1::uuid[])
+            OR maternal_grandfather_id = ANY($1::uuid[])
+            OR maternal_grandmother_id = ANY($1::uuid[])`,
+        [dogIds]
+      );
+
+      await runOptional(
+        `DELETE FROM dog_ownership
+         WHERE owner_id = $1 OR dog_id = ANY($2::uuid[])`,
+        [id, dogIds]
+      );
+
+      await runOptional(
+        `DELETE FROM dog_transfers
+         WHERE old_breeder_id = $1
+            OR new_breeder_id = $1
+            OR transferred_by = $1
+            OR dog_id = ANY($2::uuid[])`,
+        [id, dogIds]
+      );
+
+      await runOptional(
+        `DELETE FROM dog_vaccines
+         WHERE created_by = $1
+            OR dog_id = ANY($2::uuid[])`,
+        [id, dogIds]
+      );
+
+      // Remover referências parentais em cães de terceiros para permitir apagar os cães alvo.
+      await client.query(
+        `UPDATE dogs
+         SET father_id = CASE WHEN father_id = ANY($1::uuid[]) THEN NULL ELSE father_id END,
+             mother_id = CASE WHEN mother_id = ANY($1::uuid[]) THEN NULL ELSE mother_id END,
+             updated_at = CURRENT_TIMESTAMP
+         WHERE father_id = ANY($1::uuid[])
+            OR mother_id = ANY($1::uuid[])`,
+        [dogIds]
+      );
+
+      await client.query(
+        `DELETE FROM dogs
+         WHERE id = ANY($1::uuid[])
+            OR breeder_id = $2
+            OR owner_id = $2`,
+        [dogIds, id]
+      );
+    } else {
+      await runOptional('DELETE FROM breedings WHERE breeder_id = $1', [id]);
+      await runOptional('DELETE FROM dog_ownership WHERE owner_id = $1', [id]);
+      await runOptional('DELETE FROM dog_transfers WHERE old_breeder_id = $1 OR new_breeder_id = $1 OR transferred_by = $1', [id]);
+      await runOptional('DELETE FROM dog_vaccines WHERE created_by = $1', [id]);
+    }
+
+    await runOptional('DELETE FROM events WHERE creator_id = $1', [id]);
+    await runOptional('DELETE FROM breeder_ticket_transactions WHERE breeder_id = $1 OR created_by = $1', [id]);
+    await runOptional('DELETE FROM kennel_partnerships WHERE requester_id = $1 OR addressee_id = $1', [id]);
+
+    // Limpar referências opcionais para evitar bloqueio da FK na tabela users.
+    await runOptional('UPDATE users SET created_by = NULL WHERE created_by = $1', [id]);
+    await runOptional('UPDATE system_settings SET updated_by = NULL WHERE updated_by = $1', [id]);
+
+    await client.query('DELETE FROM users WHERE id = $1', [id]);
+    await client.query('COMMIT');
 
     res.json({
       message: 'Utilizador eliminado com sucesso',
@@ -991,11 +1093,14 @@ const deleteUserByAdmin = async (req, res) => {
       deleted_user_type: target.user_type,
     });
   } catch (error) {
+    await client.query('ROLLBACK');
     if (error && error.code === '23503') {
       return res.status(400).json({ error: 'Não é possível eliminar: existem registos associados a este utilizador' });
     }
     console.error(error);
     res.status(500).json({ error: 'Erro ao eliminar utilizador' });
+  } finally {
+    client.release();
   }
 };
 
