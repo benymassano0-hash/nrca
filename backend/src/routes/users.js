@@ -4,6 +4,7 @@ const usersController = require('../controllers/usersController');
 const { authenticateToken, authorize } = require('../middleware/auth');
 
 // Rotas públicas
+router.post('/register', usersController.registerUser);
 router.post('/login', usersController.loginUser);
 
 // Rotas privadas

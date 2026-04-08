@@ -112,16 +112,19 @@ const registerUser = async (req, res) => {
 
     const password_hash = await bcrypt.hash(password, 10);
 
-    // Auto-verificar criadores: is_verified = TRUE para acesso imediato
+    // Auto-registo público fica pendente até aprovação do admin.
     const result = await pool.query(
       `INSERT INTO users
        (username, email, password_hash, login_pin, full_name, phone, kennel_name, address, city, province, user_type, is_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'breeder', TRUE)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'breeder', FALSE)
        RETURNING id, username, email, full_name, kennel_name, user_type, created_at`,
       [username, email, password_hash, password, full_name || username, phone, kennel_name, address, city, province]
     );
 
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      message: 'Conta criada com sucesso. Aguarde aprovação do administrador antes de entrar.',
+      user: result.rows[0],
+    });
   } catch (error) {
     if (error instanceof Error && error.message.includes('já cadastrado')) {
       return res.status(400).json({ error: error.message });

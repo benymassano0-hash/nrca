@@ -13,7 +13,8 @@ function UsersManagementPage() {
     breeders: 0,
     agents: 0,
     viewers: 0,
-    verified: 0
+    verified: 0,
+    pending: 0,
   });
   const [breederForm, setBreederForm] = useState({
     username: '',
@@ -60,7 +61,8 @@ function UsersManagementPage() {
         breeders: response.data.filter(u => u.user_type === 'breeder').length,
         agents: response.data.filter(u => u.user_type === 'registration_agent').length,
         viewers: response.data.filter(u => u.user_type === 'viewer').length,
-        verified: response.data.filter(u => u.is_verified).length
+        verified: response.data.filter(u => u.is_verified).length,
+        pending: response.data.filter(u => !u.is_verified).length,
       };
       setStats(stats);
     } catch (error) {
@@ -167,7 +169,8 @@ function UsersManagementPage() {
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    const matchesType = filterType === 'all' || user.user_type === filterType;
+    const matchesType = filterType === 'all'
+      || (filterType === 'pending' ? !user.is_verified : user.user_type === filterType);
     
     return matchesSearch && matchesType;
   });
@@ -606,6 +609,13 @@ function UsersManagementPage() {
             <p>Verificados</p>
           </div>
         </div>
+        <div className="stat-card">
+          <div className="stat-icon">⏳</div>
+          <div className="stat-content">
+            <h3>{stats.pending}</h3>
+            <p>Pendentes</p>
+          </div>
+        </div>
       </div>
 
       {/* Filtros e Busca */}
@@ -644,6 +654,12 @@ function UsersManagementPage() {
             onClick={() => setFilterType('registration_agent')}
           >
             Agentes
+          </button>
+          <button 
+            className={`filter-btn ${filterType === 'pending' ? 'active' : ''}`}
+            onClick={() => setFilterType('pending')}
+          >
+            Pendentes ({stats.pending})
           </button>
         </div>
 
