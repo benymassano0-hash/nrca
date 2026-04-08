@@ -88,6 +88,68 @@ function ComoFuncionaPage() {
         </div>
       </div>
 
+      <div className="card compromisso-card">
+        <h2>🤝 Compromissos do Clube Angolano de Canicultura</h2>
+        <p className="subtitulo">
+          A nossa missão inclui proteger a integridade das raças, apoiar os criadores e elevar o
+          nível da canicultura ética em Angola.
+        </p>
+        <div className="compromissos-grid">
+          <article className="compromisso-item">
+            <h3>Promover a Criação Responsável</h3>
+            <p>
+              Incentivar e apoiar os criadores na adoção de práticas éticas de criação que priorizem
+              a saúde, o bem-estar e o temperamento dos cães, além da pureza e do padrão da raça.
+            </p>
+          </article>
+          <article className="compromisso-item">
+            <h3>Apoiar a Investigação e a Saúde Canina</h3>
+            <p>
+              Colaborar com instituições de investigação para promover a saúde e o bem-estar dos cães,
+              combatendo doenças hereditárias e melhorando as condições de vida das raças puras.
+            </p>
+          </article>
+          <article className="compromisso-item">
+            <h3>Preservar os Padrões de Raça</h3>
+            <p>
+              Manter elevados padrões de qualidade das diversas raças de cães em Angola, assegurando
+              que a linhagem e as características distintivas de cada raça sejam mantidas para as
+              futuras gerações.
+            </p>
+          </article>
+          <article className="compromisso-item">
+            <h3>Educar Criadores e o Público</h3>
+            <p>
+              Fornecer recursos educativos, workshops e seminários para criadores e o público em geral
+              sobre as melhores práticas na criação, cuidados, saúde e bem-estar de raças puras.
+            </p>
+          </article>
+          <article className="compromisso-item">
+            <h3>Defender a Integridade das Raças</h3>
+            <p>
+              Lutar contra práticas prejudiciais, como a criação indiscriminada e a venda
+              irresponsável de cães, garantindo que a herança e a integridade das raças puras sejam
+              protegidas e valorizadas.
+            </p>
+          </article>
+          <article className="compromisso-item">
+            <h3>Avaliar e Certificar</h3>
+            <p>
+              Organizar e promover exposições caninas, concursos e avaliações de raças, com o objetivo
+              de avaliar cães de acordo com padrões de raça reconhecidos internacionalmente e incentivar
+              a melhoria contínua da qualidade genética.
+            </p>
+          </article>
+        </div>
+        <div className="compromisso-fecho">
+          <p>
+            Através destes compromissos, o Clube Angolano de Canicultura aspira a fomentar uma
+            comunidade de canicultura responsável e ética, contribuindo para a preservação e o
+            enriquecimento do património canino em Angola.
+          </p>
+        </div>
+      </div>
+
       {/* CTA */}
       <div className="card cta-card">
         <h3>Pronto para registar o seu cão?</h3>

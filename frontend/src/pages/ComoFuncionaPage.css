@@ -49,6 +49,53 @@
   margin-bottom: 14px;
 }
 
+.compromisso-card {
+  background: linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%);
+  border: 1px solid #bfdbfe;
+}
+
+.compromissos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.compromisso-item {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+}
+
+.compromisso-item h3 {
+  margin: 0 0 8px;
+  color: #1e3a8a;
+  font-size: 1rem;
+}
+
+.compromisso-item p {
+  margin: 0;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.compromisso-fecho {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #dbeafe;
+  color: #0f172a;
+  border: 1px solid #93c5fd;
+}
+
+.compromisso-fecho p {
+  margin: 0;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
 .beneficios-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -110,6 +157,10 @@
 
 @media (max-width: 600px) {
   .beneficios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compromissos-grid {
     grid-template-columns: 1fr;
   }
 
