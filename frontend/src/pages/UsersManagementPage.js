@@ -29,18 +29,6 @@ function UsersManagementPage() {
   const [formMessage, setFormMessage] = useState('');
   const [formError, setFormError] = useState('');
   const [creatingBreeder, setCreatingBreeder] = useState(false);
-  const [agentForm, setAgentForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-    full_name: '',
-    phone: '',
-    city: '',
-    province: ''
-  });
-  const [agentMessage, setAgentMessage] = useState('');
-  const [agentError, setAgentError] = useState('');
-  const [creatingAgent, setCreatingAgent] = useState(false);
   const [teamMonthlyStats, setTeamMonthlyStats] = useState([]);
   const [togglingBreeder, setTogglingBreeder] = useState(null);
 
@@ -122,37 +110,6 @@ function UsersManagementPage() {
       setFormError(error.response?.data?.error || 'Não foi possível registar o criador.');
     } finally {
       setCreatingBreeder(false);
-    }
-  };
-
-  const handleAgentFormChange = (e) => {
-    const { name, value } = e.target;
-    setAgentForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCreateAgent = async (e) => {
-    e.preventDefault();
-    setAgentMessage('');
-    setAgentError('');
-    setCreatingAgent(true);
-
-    try {
-      const response = await api.post('/users/agents', agentForm);
-      setAgentMessage(`Agente ${response.data.username} registado com sucesso.`);
-      setAgentForm({
-        username: '',
-        email: '',
-        password: '',
-        full_name: '',
-        phone: '',
-        city: '',
-        province: ''
-      });
-      await loadUsers();
-    } catch (error) {
-      setAgentError(error.response?.data?.error || 'Não foi possível registar o agente.');
-    } finally {
-      setCreatingAgent(false);
     }
   };
 
@@ -477,68 +434,6 @@ function UsersManagementPage() {
 
           <button type="submit" className="create-breeder-btn" disabled={creatingBreeder}>
             {creatingBreeder ? 'A criar...' : 'Registar Criador'}
-          </button>
-        </form>
-      </div>
-
-      <div className="create-agent-card">
-        <h2>🗂️ Registar Agente de Registo</h2>
-        <p>Somente o admin pode criar agentes para trabalhar na plataforma.</p>
-
-        {agentMessage && <div className="form-success">{agentMessage}</div>}
-        {agentError && <div className="form-error">{agentError}</div>}
-
-        <form className="create-breeder-form" onSubmit={handleCreateAgent}>
-          <input
-            name="username"
-            placeholder="Username*"
-            value={agentForm.username}
-            onChange={handleAgentFormChange}
-            required
-          />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email*"
-            value={agentForm.email}
-            onChange={handleAgentFormChange}
-            required
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Senha provisória*"
-            value={agentForm.password}
-            onChange={handleAgentFormChange}
-            required
-          />
-          <input
-            name="full_name"
-            placeholder="Nome completo"
-            value={agentForm.full_name}
-            onChange={handleAgentFormChange}
-          />
-          <input
-            name="phone"
-            placeholder="Telefone"
-            value={agentForm.phone}
-            onChange={handleAgentFormChange}
-          />
-          <input
-            name="city"
-            placeholder="Cidade"
-            value={agentForm.city}
-            onChange={handleAgentFormChange}
-          />
-          <input
-            name="province"
-            placeholder="Província"
-            value={agentForm.province}
-            onChange={handleAgentFormChange}
-          />
-
-          <button type="submit" className="create-agent-btn" disabled={creatingAgent}>
-            {creatingAgent ? 'A criar...' : 'Registar Agente'}
           </button>
         </form>
       </div>

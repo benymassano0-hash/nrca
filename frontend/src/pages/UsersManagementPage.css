@@ -34,14 +34,6 @@
   margin-bottom: 30px;
 }
 
-.create-agent-card {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin-bottom: 30px;
-}
-
 .team-panel-card {
   background: #ffffff;
   border-radius: 10px;
@@ -122,26 +114,6 @@
 }
 
 .create-breeder-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.create-agent-btn {
-  grid-column: 1 / span 4;
-  padding: 11px 14px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.create-agent-btn:hover {
-  background: #1d4ed8;
-}
-
-.create-agent-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -703,7 +675,6 @@
   }
 
   .create-breeder-card,
-  .create-agent-card,
   .team-panel-card,
   .filters-section,
   .users-table-container {
@@ -744,8 +715,7 @@
     grid-template-columns: 1fr;
   }
 
-  .create-breeder-btn,
-  .create-agent-btn {
+  .create-breeder-btn {
     grid-column: auto;
     width: 100%;
   }
