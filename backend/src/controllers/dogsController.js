@@ -170,6 +170,14 @@ const createDog = async (req, res) => {
           father_id, mother_id, health_status, notes, breeder_name } = req.body;
   const photo_url = req.file ? `/uploads/dogs/${req.file.filename}` : null;
 
+  const normalizedBirthDate = birth_date ? String(birth_date).trim() || null : null;
+  const normalizedFatherId = father_id ? String(father_id).trim() || null : null;
+  const normalizedMotherId = mother_id ? String(mother_id).trim() || null : null;
+  const normalizedColor = color ? String(color).trim() || null : null;
+  const normalizedMicrochipId = microchip_id ? String(microchip_id).trim() || null : null;
+  const normalizedHealthStatus = health_status ? String(health_status).trim() || null : null;
+  const normalizedNotes = notes ? String(notes).trim() || null : null;
+
   if (!name || !breed_id || !gender) {
     return res.status(400).json({ error: 'Campos obrigatórios: name, breed_id, gender' });
   }
@@ -341,8 +349,8 @@ const createDog = async (req, res) => {
           father_id, mother_id, breeder_id, owner_id, health_status, notes, photo_url, qr_code_url)
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
          RETURNING *`,
-        [registration_id, name, breed_id, birth_date, gender, color, microchip_id, 
-         father_id, mother_id, breeder.id, breeder.id, health_status, notes, photo_url, qrCodeUrl]
+        [registration_id, name, breed_id, normalizedBirthDate, gender, normalizedColor, normalizedMicrochipId, 
+        normalizedFatherId, normalizedMotherId, breeder.id, breeder.id, normalizedHealthStatus, normalizedNotes, photo_url, qrCodeUrl]
       );
 
       if (!executorIsPrivileged) {
@@ -392,6 +400,14 @@ const updateDog = async (req, res) => {
           father_id, mother_id, health_status, notes } = req.body;
   const photo_url = req.file ? `/uploads/dogs/${req.file.filename}` : null;
 
+  const normalizedBirthDate = birth_date === '' ? null : birth_date;
+  const normalizedFatherId = father_id === '' ? null : father_id;
+  const normalizedMotherId = mother_id === '' ? null : mother_id;
+  const normalizedColor = color === '' ? null : color;
+  const normalizedMicrochipId = microchip_id === '' ? null : microchip_id;
+  const normalizedHealthStatus = health_status === '' ? null : health_status;
+  const normalizedNotes = notes === '' ? null : notes;
+
   try {
     const dogCheck = await pool.query(
       'SELECT id, breeder_id, owner_id FROM dogs WHERE id = $1',
@@ -426,6 +442,8 @@ const updateDog = async (req, res) => {
            WHERE id = $12`,
       [name, breed_id, birth_date, gender, color, microchip_id, 
            father_id, mother_id, health_status, notes, photo_url, id]
+      [name, breed_id, normalizedBirthDate, gender, normalizedColor, normalizedMicrochipId, 
+       normalizedFatherId, normalizedMotherId, normalizedHealthStatus, normalizedNotes, photo_url, id]
     );
 
     if (!updateResult.rowCount) {
