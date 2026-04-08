@@ -13,8 +13,11 @@ const parseBoolean = (value, fallback = false) => {
 };
 
 const getSslConfig = () => {
-  const useSsl = parseBoolean(process.env.DB_SSL, false);
-  return useSsl ? { rejectUnauthorized: false } : false;
+  const val = (process.env.DB_SSL || '').trim().toLowerCase();
+  if (val === 'require' || val === 'true') {
+    return { rejectUnauthorized: false };
+  }
+  return false;
 };
 
 const getPgConfig = () => {

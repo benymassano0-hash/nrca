@@ -1,8 +1,3 @@
-databases:
-  - name: rcna-db
-    databaseName: rcna
-    user: rcna
-
 services:
   - type: web
     name: rcna
@@ -17,11 +12,9 @@ services:
       - key: DB_CLIENT
         value: postgres
       - key: DB_SSL
-        value: false
+        value: require
       - key: DATABASE_URL
-        fromDatabase:
-          name: rcna-db
-          property: connectionString
+        sync: false
       - key: FRONTEND_ORIGINS
         sync: false
       - key: JWT_SECRET
