@@ -201,6 +201,75 @@ function UsersManagementPage() {
     }
   };
 
+  const handleEditUser = async (targetUser) => {
+    const username = window.prompt('Username:', targetUser.username || '');
+    if (username === null) return;
+
+    const email = window.prompt('Email:', targetUser.email || '');
+    if (email === null) return;
+
+    const full_name = window.prompt('Nome completo:', targetUser.full_name || '');
+    if (full_name === null) return;
+
+    const phone = window.prompt('Telefone:', targetUser.phone || '');
+    if (phone === null) return;
+
+    const kennel_name = window.prompt('Canil:', targetUser.kennel_name || '');
+    if (kennel_name === null) return;
+
+    const address = window.prompt('Endereço:', targetUser.address || '');
+    if (address === null) return;
+
+    const city = window.prompt('Cidade:', targetUser.city || '');
+    if (city === null) return;
+
+    const province = window.prompt('Província:', targetUser.province || '');
+    if (province === null) return;
+
+    const login_pin = window.prompt(
+      'PIN (deixe vazio para manter o atual):',
+      ''
+    );
+    if (login_pin === null) return;
+
+    try {
+      const response = await api.put(`/users/${targetUser.id}`, {
+        username: String(username).trim(),
+        email: String(email).trim(),
+        full_name: String(full_name).trim(),
+        phone: String(phone).trim(),
+        kennel_name: String(kennel_name).trim(),
+        address: String(address).trim(),
+        city: String(city).trim(),
+        province: String(province).trim(),
+        login_pin: String(login_pin).trim(),
+      });
+
+      const updatedUser = response.data;
+      setUsers((prev) => prev.map((u) => (u.id === updatedUser.id ? { ...u, ...updatedUser } : u)));
+      setSelectedUser((prev) => (prev && prev.id === updatedUser.id ? { ...prev, ...updatedUser } : prev));
+      alert('Utilizador atualizado com sucesso.');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Não foi possível editar o utilizador.');
+    }
+  };
+
+  const handleDeleteUser = async (targetUser) => {
+    const confirmed = window.confirm(
+      `Eliminar utilizador ${targetUser.username}? Esta ação é irreversível.`
+    );
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/users/${targetUser.id}`);
+      setUsers((prev) => prev.filter((u) => u.id !== targetUser.id));
+      setSelectedUser((prev) => (prev && prev.id === targetUser.id ? null : prev));
+      alert('Utilizador eliminado com sucesso.');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Não foi possível eliminar o utilizador.');
+    }
+  };
+
   const handleToggleBreederActive = async (breeder) => {
     setTogglingBreeder(breeder.id);
     try {
@@ -645,6 +714,13 @@ function UsersManagementPage() {
                     >
                       👁️ Ver
                     </button>
+                    <button
+                      className="view-btn"
+                      onClick={() => handleEditUser(user)}
+                      title="Editar utilizador"
+                    >
+                      ✏️ Editar
+                    </button>
                     {user.user_type === 'breeder' && (
                       <>
                         <button
@@ -684,6 +760,14 @@ function UsersManagementPage() {
                       <button
                         className="delete-agent-btn"
                         onClick={() => handleDeleteAgent(user)}
+                      >
+                        🗑️ Eliminar
+                      </button>
+                    )}
+                    {user.user_type !== 'registration_agent' && (
+                      <button
+                        className="delete-agent-btn"
+                        onClick={() => handleDeleteUser(user)}
                       >
                         🗑️ Eliminar
                       </button>
@@ -843,6 +927,18 @@ function UsersManagementPage() {
                   🗑️ Eliminar Agente
                 </button>
               )}
+              <button
+                className="btn-primary"
+                onClick={() => handleEditUser(selectedUser)}
+              >
+                ✏️ Editar Utilizador
+              </button>
+              <button
+                className="btn-delete-agent"
+                onClick={() => handleDeleteUser(selectedUser)}
+              >
+                🗑️ Eliminar Utilizador
+              </button>
               <button className="btn-primary" onClick={() => setSelectedUser(null)}>
                 Fechar
               </button>

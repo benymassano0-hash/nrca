@@ -31,6 +31,8 @@ router.post('/:id/credit-balance', authenticateToken, authorize('admin'), usersC
 
 // Rotas de admin
 router.get('/', authenticateToken, authorize('admin'), usersController.getAllUsers);
+router.put('/:id', authenticateToken, authorize('admin'), usersController.updateUserByAdmin);
+router.delete('/:id', authenticateToken, authorize('admin'), usersController.deleteUserByAdmin);
 router.get('/:id', authenticateToken, authorize('admin'), usersController.getUserById);
 
 module.exports = router;

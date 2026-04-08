@@ -884,6 +884,118 @@ const deleteRegistrationAgentByAdmin = async (req, res) => {
   }
 };
 
+// Editar utilizador (apenas admin)
+const updateUserByAdmin = async (req, res) => {
+  const { id } = req.params;
+  const {
+    username,
+    email,
+    full_name,
+    phone,
+    kennel_name,
+    address,
+    city,
+    province,
+    login_pin,
+  } = req.body;
+
+  try {
+    await ensureBreederControlsSchema();
+
+    const existingResult = await pool.query('SELECT id FROM users WHERE id = $1', [id]);
+    if (!existingResult.rows.length) {
+      return res.status(404).json({ error: 'Utilizador não encontrado' });
+    }
+
+    const normalizedUsername = String(username || '').trim();
+    const normalizedEmail = String(email || '').trim();
+    if (!normalizedUsername || !normalizedEmail) {
+      return res.status(400).json({ error: 'username e email são obrigatórios' });
+    }
+
+    let passwordHashValue = null;
+    let pinValue = null;
+    if (typeof login_pin === 'string' && login_pin.trim() !== '') {
+      pinValue = login_pin.trim();
+      passwordHashValue = await bcrypt.hash(pinValue, 10);
+    }
+
+    const result = await pool.query(
+      `UPDATE users
+       SET username = $1,
+           email = $2,
+           full_name = $3,
+           phone = $4,
+           kennel_name = $5,
+           address = $6,
+           city = $7,
+           province = $8,
+           login_pin = COALESCE($9, login_pin),
+           password_hash = COALESCE($10, password_hash),
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $11
+       RETURNING id, username, email, full_name, phone, kennel_name, address, city, province, user_type, is_verified, is_active, dog_limit, tickets, login_pin, created_at`,
+      [
+        normalizedUsername,
+        normalizedEmail,
+        full_name || null,
+        phone || null,
+        kennel_name || null,
+        address || null,
+        city || null,
+        province || null,
+        pinValue,
+        passwordHashValue,
+        id,
+      ]
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    if (error && error.code === '23505') {
+      return res.status(400).json({ error: 'Username ou email já está em uso por outro utilizador' });
+    }
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao editar utilizador' });
+  }
+};
+
+// Eliminar utilizador (apenas admin)
+const deleteUserByAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (req.user && req.user.id === id) {
+      return res.status(400).json({ error: 'Não pode eliminar a própria conta' });
+    }
+
+    const userResult = await pool.query(
+      'SELECT id, username, user_type FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (!userResult.rows.length) {
+      return res.status(404).json({ error: 'Utilizador não encontrado' });
+    }
+
+    const target = userResult.rows[0];
+    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+
+    res.json({
+      message: 'Utilizador eliminado com sucesso',
+      deleted_user_id: target.id,
+      deleted_user_username: target.username,
+      deleted_user_type: target.user_type,
+    });
+  } catch (error) {
+    if (error && error.code === '23503') {
+      return res.status(400).json({ error: 'Não é possível eliminar: existem registos associados a este utilizador' });
+    }
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao eliminar utilizador' });
+  }
+};
+
 // Login com Google
 const loginWithGoogle = async (req, res) => {
   return res.status(403).json({
@@ -904,6 +1016,8 @@ module.exports = {
   getAgentsMonthlyStats,
   getMyMonthlyStats,
   deleteRegistrationAgentByAdmin,
+  updateUserByAdmin,
+  deleteUserByAdmin,
   getAllUsers,
   getUserById,
   verifyUser,
