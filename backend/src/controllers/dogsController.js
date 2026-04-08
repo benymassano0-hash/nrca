@@ -227,41 +227,43 @@ const createDog = async (req, res) => {
       const breederInput = String(breeder_name).trim();
       const breederNameNormalized = breederInput.toLowerCase();
       let breederResult = await pool.query(
-        `SELECT id, full_name, username
+        `SELECT id, full_name, username, kennel_name
          FROM users
          WHERE user_type IN ('breeder', 'admin')
            AND (
              LOWER(COALESCE(full_name, '')) = $1
               OR LOWER(COALESCE(username, '')) = $2
              OR LOWER(COALESCE(email, '')) = $3
+             OR LOWER(COALESCE(kennel_name, '')) = $4
            )
          LIMIT 1`,
-        [breederNameNormalized, breederNameNormalized, breederNameNormalized]
+        [breederNameNormalized, breederNameNormalized, breederNameNormalized, breederNameNormalized]
       );
 
       // Fallback tolerante: permite procura parcial por nome/username/email.
       if (breederResult.rows.length === 0) {
         const likeTerm = `%${breederNameNormalized}%`;
         const fallbackResult = await pool.query(
-          `SELECT id, full_name, username
+          `SELECT id, full_name, username, kennel_name
            FROM users
            WHERE user_type IN ('breeder', 'admin')
              AND (
                LOWER(COALESCE(full_name, '')) LIKE $1
                OR LOWER(COALESCE(username, '')) LIKE $2
                OR LOWER(COALESCE(email, '')) LIKE $3
+               OR LOWER(COALESCE(kennel_name, '')) LIKE $4
              )
            ORDER BY id ASC
            LIMIT 5`,
-          [likeTerm, likeTerm, likeTerm]
+          [likeTerm, likeTerm, likeTerm, likeTerm]
         );
 
         if (fallbackResult.rows.length === 1) {
           breederResult = { rows: [fallbackResult.rows[0]] };
         } else if (fallbackResult.rows.length > 1) {
           return res.status(400).json({
-            error: `Foram encontrados vários criadores para "${breederInput}". Use o username exato: ${fallbackResult.rows
-              .map((candidate) => candidate.username)
+            error: `Foram encontrados vários criadores/canis para "${breederInput}". Use o username exato: ${fallbackResult.rows
+              .map((candidate) => candidate.username || candidate.kennel_name || candidate.full_name)
               .filter(Boolean)
               .join(', ')}`,
           });
@@ -269,7 +271,7 @@ const createDog = async (req, res) => {
       }
 
       if (breederResult.rows.length === 0) {
-        return res.status(404).json({ error: 'Criador não encontrado. Informe o nome de criador registado.' });
+        return res.status(404).json({ error: 'Criador/canil não encontrado. Informe o nome de criador, canil ou username registado.' });
       }
 
       breeder = breederResult.rows[0];

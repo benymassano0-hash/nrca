@@ -56,7 +56,7 @@ const getPedigreeById = async (req, res) => {
               maternal_grandfather.registration_id as maternal_grandfather_registration_id,
               maternal_grandfather.photo_url as maternal_grandfather_photo_url,
               maternal_grandmother.name as maternal_grandmother_name,
-              maternal_grandmother.registration_id as maternal_grandmother_registration_id
+              maternal_grandmother.registration_id as maternal_grandmother_registration_id,
               maternal_grandmother.photo_url as maternal_grandmother_photo_url
        FROM dogs d
        LEFT JOIN breeds b ON d.breed_id = b.id
@@ -115,7 +115,7 @@ const getPedigreeByRegistrationId = async (req, res) => {
               maternal_grandfather.registration_id as maternal_grandfather_registration_id,
               maternal_grandfather.photo_url as maternal_grandfather_photo_url,
               maternal_grandmother.name as maternal_grandmother_name,
-              maternal_grandmother.registration_id as maternal_grandmother_registration_id
+              maternal_grandmother.registration_id as maternal_grandmother_registration_id,
               maternal_grandmother.photo_url as maternal_grandmother_photo_url
        FROM dogs d
        LEFT JOIN breeds b ON d.breed_id = b.id
@@ -305,13 +305,16 @@ const searchPublicPedigree = async (req, res) => {
              d.birth_date,
              d.gender,
              d.color,
+              d.photo_url,
              b.name as breed_name,
              u.full_name as breeder_name,
              u.id as breeder_id,
              father.name as father_name,
              father.registration_id as father_registration_id,
+              father.photo_url as father_photo_url,
              mother.name as mother_name,
-             mother.registration_id as mother_registration_id
+              mother.registration_id as mother_registration_id,
+              mother.photo_url as mother_photo_url
       FROM dogs d
       LEFT JOIN breeds b ON d.breed_id = b.id
       LEFT JOIN users u ON d.owner_id = u.id
@@ -376,17 +379,23 @@ const getPublicPedigreeDetail = async (req, res) => {
               father.name as father_name, 
               father.id as father_id,
               father.registration_id as father_registration_id,
+              father.photo_url as father_photo_url,
               mother.name as mother_name,
               mother.id as mother_id,
               mother.registration_id as mother_registration_id,
+              mother.photo_url as mother_photo_url,
               paternal_grandfather.name as paternal_grandfather_name,
               paternal_grandfather.registration_id as paternal_grandfather_registration_id,
+              paternal_grandfather.photo_url as paternal_grandfather_photo_url,
               paternal_grandmother.name as paternal_grandmother_name,
               paternal_grandmother.registration_id as paternal_grandmother_registration_id,
+              paternal_grandmother.photo_url as paternal_grandmother_photo_url,
               maternal_grandfather.name as maternal_grandfather_name,
               maternal_grandfather.registration_id as maternal_grandfather_registration_id,
+              maternal_grandfather.photo_url as maternal_grandfather_photo_url,
               maternal_grandmother.name as maternal_grandmother_name,
-              maternal_grandmother.registration_id as maternal_grandmother_registration_id
+              maternal_grandmother.registration_id as maternal_grandmother_registration_id,
+              maternal_grandmother.photo_url as maternal_grandmother_photo_url
        FROM dogs d
        LEFT JOIN breeds b ON d.breed_id = b.id
        LEFT JOIN users u ON d.owner_id = u.id

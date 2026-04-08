@@ -194,6 +194,15 @@
   cursor: pointer;
 }
 
+.public-result-photo {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 12px;
+}
+
 .result-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -476,6 +485,16 @@
   justify-content: center;
   gap: 2px;
 }
+
+.public-pedigree-photo {
+  width: 100%;
+  max-width: 88px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  margin: 0 auto 4px;
+}
 .public-pedigree-box strong {
   display: block;
   font-weight: 600;
@@ -537,5 +556,66 @@
 
   .dog-card.dog-level-1 {
     max-width: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .public-pedigree-layout,
+  .public-pedigree-layout * {
+    visibility: visible;
+  }
+
+  .public-pedigree-layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #fff !important;
+  }
+
+  .public-pedigree-print-btn,
+  .back-btn,
+  .header-section,
+  .search-section,
+  .info-section,
+  .alert,
+  .results-section > h2,
+  .results-grid {
+    display: none !important;
+  }
+
+  .public-pedigree-container,
+  .results-section,
+  .public-pedigree-meta-card,
+  .public-pedigree-layout,
+  .public-pedigree-table-wrap {
+    box-shadow: none !important;
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .public-pedigree-table,
+  .public-pedigree-table th,
+  .public-pedigree-table td,
+  .public-pedigree-box,
+  .public-pedigree-photo {
+    border-color: #000 !important;
   }
 }

@@ -10,6 +10,13 @@ function PublicPedigreeSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const apiOrigin = (api?.defaults?.baseURL || '').replace(/\/api\/?$/, '');
+
+  const getPhotoUrl = (photoPath) => {
+    if (!photoPath) return '';
+    if (/^https?:\/\//i.test(photoPath)) return photoPath;
+    return `${apiOrigin}${photoPath}`;
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -66,8 +73,18 @@ function PublicPedigreeSearchPage() {
     }
   };
 
-  const PedigreeCell = ({ name, registrationId, label, isMain = false }) => (
+  const PedigreeCell = ({ name, registrationId, label, photoUrl, isMain = false }) => (
     <div className={`public-pedigree-box ${isMain ? 'main' : ''}`}>
+      {photoUrl && (
+        <img
+          src={getPhotoUrl(photoUrl)}
+          alt={name || 'Cão'}
+          className="public-pedigree-photo"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+      )}
       <strong>{name || '—'}</strong>
       <small>{registrationId || '—'}</small>
       {label ? <small>{label}</small> : null}
@@ -112,6 +129,7 @@ function PublicPedigreeSearchPage() {
                   <PedigreeCell
                     name={dog.name}
                     registrationId={dog.registration_id}
+                    photoUrl={dog.photo_url}
                     isMain={true}
                   />
                 </td>
@@ -119,12 +137,14 @@ function PublicPedigreeSearchPage() {
                   <PedigreeCell
                     name={dog.father_name ? `(Sire) ${dog.father_name}` : '—'}
                     registrationId={dog.father_registration_id}
+                    photoUrl={dog.father_photo_url}
                   />
                 </td>
                 <td>
                   <PedigreeCell
                     name={dog.paternal_grandfather_name}
                     registrationId={dog.paternal_grandfather_registration_id}
+                    photoUrl={dog.paternal_grandfather_photo_url}
                   />
                 </td>
                 <td><PedigreeCell label="Bis-Avô Pat. Pat." /></td>
@@ -134,6 +154,7 @@ function PublicPedigreeSearchPage() {
                   <PedigreeCell
                     name={dog.paternal_grandmother_name}
                     registrationId={dog.paternal_grandmother_registration_id}
+                    photoUrl={dog.paternal_grandmother_photo_url}
                   />
                 </td>
                 <td><PedigreeCell label="Bis-Avó Pat. Pat." /></td>
@@ -151,12 +172,14 @@ function PublicPedigreeSearchPage() {
                   <PedigreeCell
                     name={dog.mother_name ? `(Dam) ${dog.mother_name}` : '—'}
                     registrationId={dog.mother_registration_id}
+                    photoUrl={dog.mother_photo_url}
                   />
                 </td>
                 <td>
                   <PedigreeCell
                     name={dog.maternal_grandfather_name}
                     registrationId={dog.maternal_grandfather_registration_id}
+                    photoUrl={dog.maternal_grandfather_photo_url}
                   />
                 </td>
                 <td><PedigreeCell label="Bis-Avô Mat. Pat." /></td>
@@ -166,6 +189,7 @@ function PublicPedigreeSearchPage() {
                   <PedigreeCell
                     name={dog.maternal_grandmother_name}
                     registrationId={dog.maternal_grandmother_registration_id}
+                    photoUrl={dog.maternal_grandmother_photo_url}
                   />
                 </td>
                 <td><PedigreeCell label="Bis-Avó Mat. Pat." /></td>
@@ -269,6 +293,16 @@ function PublicPedigreeSearchPage() {
           <div className="results-grid">
             {results.map(dog => (
               <div key={dog.id} className="result-card">
+                {dog.photo_url && (
+                  <img
+                    src={getPhotoUrl(dog.photo_url)}
+                    alt={`Foto de ${dog.name}`}
+                    className="public-result-photo"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
                 <h3>{dog.name}</h3>
                 <div className="result-info">
                   <p><strong>Raça:</strong> {dog.breed_name || 'N/A'}</p>

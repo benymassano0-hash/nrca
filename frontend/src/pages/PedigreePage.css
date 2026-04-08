@@ -276,8 +276,31 @@
     background: #fff;
   }
 
+  body * {
+    visibility: hidden;
+  }
+
+  .pedigree-print-layout,
+  .pedigree-print-layout * {
+    visibility: visible;
+  }
+
+  .pedigree-print-layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   .navbar,
   .pedigree-print-btn {
+    display: none !important;
+  }
+
+  .pedigree-admin-panel {
     display: none !important;
   }
 
@@ -286,9 +309,14 @@
     padding: 0 !important;
   }
 
-  .pedigree-print-layout {
-    max-width: 100% !important;
-    margin: 0 !important;
+  .pedigree-title-row {
+    margin-bottom: 8mm;
+  }
+
+  .pedigree-meta-card,
+  .pedigree-tree-card,
+  .pedigree-header {
+    box-shadow: none !important;
   }
 
   .pedigree-tree,

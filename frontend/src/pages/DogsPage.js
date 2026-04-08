@@ -269,13 +269,13 @@ function DogsPage() {
               />
             </div>
             <div className="form-group">
-              <label>Nome do Criador*</label>
+              <label>Nome do Criador ou Canil*</label>
               <input
                 type="text"
                 name="breeder_name"
                 value={formData.breeder_name}
                 onChange={handleChange}
-                placeholder="Nome completo ou username do criador"
+                placeholder="Nome do criador, nome do canil ou username"
                 readOnly={isBreeder}
                 required
               />

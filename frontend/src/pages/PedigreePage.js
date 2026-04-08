@@ -150,7 +150,7 @@ function PedigreePage() {
       </div>
 
       {isAdmin && (
-        <div className="card" style={{ marginBottom: '20px' }}>
+        <div className="card pedigree-admin-panel" style={{ marginBottom: '20px' }}>
           <h3>Registar / Atualizar Pedigree (Admin)</h3>
           {adminMessage && <div className="success">{adminMessage}</div>}
           {adminError && <div className="error">{adminError}</div>}
