@@ -20,6 +20,7 @@ import UsersManagementPage from './pages/UsersManagementPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import PendingApprovalsPage from './pages/PendingApprovalsPage';
 import PricesPage from './pages/PricesPage';
+import ParceiriasPage from './pages/ParceiriasPage';
 
 // Componentes
 import Navbar from './components/Navbar';
@@ -113,6 +114,10 @@ function App() {
           <Route 
             path="/admin/aprovacoes" 
             element={<PrivateRoute user={user} requiredRole="admin"><PendingApprovalsPage /></PrivateRoute>} 
+          />
+          <Route 
+            path="/parcerias" 
+            element={<PrivateRoute user={user}><ParceiriasPage user={user} /></PrivateRoute>} 
           />
         </Routes>
       </div>

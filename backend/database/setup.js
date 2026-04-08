@@ -161,6 +161,23 @@ const queries = `
   VALUES ('litter_registration_fee_kz', '10000', 'Taxa base para registo de ninhada/cruzamento (Kz)')
   ON CONFLICT (setting_key) DO NOTHING;
 
+  -- Tabela de Parcerias entre Canis
+  CREATE TABLE IF NOT EXISTS kennel_partnerships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    requester_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    addressee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+      CHECK (status IN ('pending', 'accepted', 'rejected')),
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (requester_id, addressee_id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_partnerships_requester ON kennel_partnerships(requester_id);
+  CREATE INDEX IF NOT EXISTS idx_partnerships_addressee ON kennel_partnerships(addressee_id);
+  CREATE INDEX IF NOT EXISTS idx_partnerships_status ON kennel_partnerships(status);
+
   -- Índices para melhor performance
   CREATE INDEX IF NOT EXISTS idx_dogs_breed_id ON dogs(breed_id);
   CREATE INDEX IF NOT EXISTS idx_dogs_breeder_id ON dogs(breeder_id);

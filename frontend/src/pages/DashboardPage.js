@@ -158,6 +158,19 @@ function DashboardPage({ user }) {
         </div>
       )}
 
+      {user.user_type === 'breeder' && (
+        <div className="quick-actions">
+          <h2>🤝 Parcerias de Canil</h2>
+          <p>Anuncie o vosso canil parceiro, aceite pedidos e gira as parcerias activas.</p>
+          <div className="quick-actions-grid">
+            <Link to="/parcerias" className="quick-action-card">
+              <h3>🤝 Gerir Parcerias</h3>
+              <span>Ver parceiros, pedidos recebidos e pesquisar criadores</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {user.user_type === 'registration_agent' && (
         <div className="agent-monthly-panel">
           <div className="chart-panel-header">

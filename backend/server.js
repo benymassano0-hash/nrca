@@ -13,6 +13,7 @@ const pedigreeRoutes = require('./src/routes/pedigree');
 const eventsRoutes = require('./src/routes/events');
 const vaccinesRoutes = require('./src/routes/vaccines');
 const settingsRoutes = require('./src/routes/settings');
+const partnershipsRoutes = require('./src/routes/partnerships');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -66,6 +67,7 @@ app.use('/api/pedigree', pedigreeRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/vaccines', vaccinesRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/partnerships', partnershipsRoutes);
 
 // Servir Frontend React (build de produção)
 const frontendBuild = path.join(__dirname, '..', 'frontend', 'build');
