@@ -1,0 +1,88 @@
+.anunciar-venda-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.venda-header-card h1 {
+  margin-bottom: 8px;
+}
+
+.venda-header-card p {
+  margin: 0;
+  color: #475569;
+}
+
+.venda-form-card form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.venda-form-card .form-group:last-of-type {
+  grid-column: 1 / -1;
+}
+
+.venda-form-card button {
+  grid-column: 1 / -1;
+  width: fit-content;
+}
+
+.selected-dog-box {
+  grid-column: 1 / -1;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.selected-dog-box span {
+  color: #64748b;
+}
+
+.venda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.venda-item {
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 14px;
+  background: #fff;
+}
+
+.venda-item h3 {
+  margin: 0 0 8px;
+}
+
+.venda-item p {
+  margin: 6px 0;
+}
+
+.venda-item .desc {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.remove-btn {
+  background: #b91c1c;
+  margin-top: 10px;
+}
+
+.remove-btn:hover {
+  background: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .venda-form-card form {
+    grid-template-columns: 1fr;
+  }
+
+  .venda-form-card button {
+    width: 100%;
+  }
+}

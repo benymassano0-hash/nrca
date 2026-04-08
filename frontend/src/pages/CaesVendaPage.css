@@ -1,0 +1,41 @@
+.caes-venda-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.venda-public-header p {
+  margin: 0;
+  color: #475569;
+}
+
+.venda-public-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.venda-public-item {
+  padding: 14px;
+}
+
+.venda-public-item h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.venda-public-item p {
+  margin: 6px 0;
+}
+
+.venda-public-photo {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 10px;
+}
+
+.venda-public-desc {
+  color: #475569;
+}

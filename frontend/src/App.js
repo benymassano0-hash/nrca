@@ -14,6 +14,8 @@ import PublicPedigreeSearchPage from './pages/PublicPedigreeSearchPage';
 import BreedingsPage from './pages/BreedingsPage';
 import BreedsPage from './pages/BreedsPage';
 import AnunciarEventoPage from './pages/AnunciarEventoPage';
+import AnunciarVendaPage from './pages/AnunciarVendaPage';
+import CaesVendaPage from './pages/CaesVendaPage';
 import UsersManagementPage from './pages/UsersManagementPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import PricesPage from './pages/PricesPage';
@@ -56,6 +58,7 @@ function App() {
           />
           <Route path="/precos" element={<PricesPage />} />
           <Route path="/pedigree-buscar" element={<PublicPedigreeSearchPage />} />
+          <Route path="/caes-venda" element={<CaesVendaPage />} />
           
           {/* Rotas privadas */}
           <Route 
@@ -93,6 +96,10 @@ function App() {
           <Route 
             path="/anunciar-evento" 
             element={<PrivateRoute user={user}><AnunciarEventoPage /></PrivateRoute>} 
+          />
+          <Route 
+            path="/anunciar-venda" 
+            element={<PrivateRoute user={user}><AnunciarVendaPage /></PrivateRoute>} 
           />
           <Route 
             path="/admin" 

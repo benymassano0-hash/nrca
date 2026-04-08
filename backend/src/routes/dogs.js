@@ -33,6 +33,8 @@ const upload = multer({
 
 // Rotas públicas (leitura)
 router.get('/', dogsController.getAllDogs);
+router.get('/sale/public', dogsController.getPublicDogsForSale);
+router.get('/sale/my/listings', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), dogsController.getMySaleDogs);
 router.get('/next-registration-id', authenticateToken, authorize('admin', 'registration_agent'), dogsController.getNextRegistrationId);
 router.get('/registration/:registration_id', dogsController.getDogByRegistrationId);
 router.get('/:id', dogsController.getDogById);
@@ -41,6 +43,8 @@ router.get('/:id', dogsController.getDogById);
 router.post('/', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), upload.single('photo'), dogsController.createDog);
 router.put('/:id', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), upload.single('photo'), dogsController.updateDog);
 router.delete('/:id', authenticateToken, authorize('admin', 'registration_agent'), dogsController.deleteDog);
+router.put('/:id/sale', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), dogsController.announceDogForSale);
+router.delete('/:id/sale', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), dogsController.removeDogFromSale);
 
 // Transferência de cão
 router.post('/transfer/init', authenticateToken, authorize('admin', 'registration_agent', 'breeder'), dogsController.transferDog);

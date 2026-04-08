@@ -45,9 +45,11 @@ function Navbar({ user, setUser }) {
           <li><Link to="/" onClick={closeMobileMenu}>Início</Link></li>
           <li><Link to="/precos" onClick={closeMobileMenu}>💰 Preços</Link></li>
           <li><Link to="/pedigree-buscar" onClick={closeMobileMenu}>🔍 Pedigree</Link></li>
+          <li><Link to="/caes-venda" onClick={closeMobileMenu}>💸 Cães à Venda</Link></li>
           {user ? (
             <>
               <li><Link to="/dogs" onClick={closeMobileMenu}>Cães</Link></li>
+              <li><Link to="/anunciar-venda" onClick={closeMobileMenu}>📣 Anunciar Venda</Link></li>
               <li><Link to="/transferir-cao" onClick={closeMobileMenu}>🔄 Transferir</Link></li>
               <li><Link to="/breedings" onClick={closeMobileMenu}>Cruzamentos</Link></li>
               <li><Link to="/breeds" onClick={closeMobileMenu}>Raças</Link></li>

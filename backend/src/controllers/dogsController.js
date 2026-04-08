@@ -10,6 +10,7 @@ if (!fs.existsSync(qrDir)) {
 }
 
 let breederCommercialSchemaPromise;
+let dogSaleSchemaPromise;
 const ensureColumn = async (tableName, columnName, columnDefinition) => {
   try {
     await pool.query(`ALTER TABLE ${tableName} ADD COLUMN IF NOT EXISTS ${columnDefinition}`);
@@ -55,6 +56,23 @@ const ensureBreederCommercialSchema = async () => {
   }
 
   await breederCommercialSchemaPromise;
+};
+
+const ensureDogSaleSchema = async () => {
+  if (!dogSaleSchemaPromise) {
+    dogSaleSchemaPromise = (async () => {
+      await ensureColumn('dogs', 'is_for_sale', 'is_for_sale BOOLEAN NOT NULL DEFAULT FALSE');
+      await ensureColumn('dogs', 'sale_price', 'sale_price NUMERIC(12,2)');
+      await ensureColumn('dogs', 'sale_description', 'sale_description TEXT');
+      await ensureColumn('dogs', 'sale_contact', 'sale_contact VARCHAR(255)');
+      await ensureColumn('dogs', 'sale_city', 'sale_city VARCHAR(120)');
+    })().catch((error) => {
+      dogSaleSchemaPromise = null;
+      throw error;
+    });
+  }
+
+  await dogSaleSchemaPromise;
 };
 
 // Listar todos os cães
@@ -742,6 +760,172 @@ const getAvailableBreeders = async (req, res) => {
   }
 };
 
+const getPublicDogsForSale = async (req, res) => {
+  try {
+    await ensureDogSaleSchema();
+    const result = await pool.query(
+      `SELECT d.id,
+              d.registration_id,
+              d.name,
+              d.photo_url,
+              d.gender,
+              d.birth_date,
+              d.color,
+              d.sale_price,
+              d.sale_description,
+              d.sale_contact,
+              d.sale_city,
+              b.name as breed_name,
+              u.full_name as breeder_name,
+              u.kennel_name as kennel_name
+       FROM dogs d
+       LEFT JOIN breeds b ON d.breed_id = b.id
+       LEFT JOIN users u ON d.breeder_id = u.id
+       WHERE d.is_for_sale = TRUE
+       ORDER BY d.updated_at DESC NULLS LAST, d.created_at DESC`
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao carregar cães à venda' });
+  }
+};
+
+const getMySaleDogs = async (req, res) => {
+  try {
+    await ensureDogSaleSchema();
+
+    const canViewAll = req.user?.user_type === 'admin' || req.user?.user_type === 'registration_agent';
+    const params = [];
+    let whereClause = '';
+    if (!canViewAll) {
+      params.push(req.user.id);
+      whereClause = 'WHERE d.breeder_id = $1 OR d.owner_id = $1';
+    }
+
+    const query = `SELECT d.id,
+                          d.registration_id,
+                          d.name,
+                          d.photo_url,
+                          d.is_for_sale,
+                          d.sale_price,
+                          d.sale_description,
+                          d.sale_contact,
+                          d.sale_city,
+                          b.name as breed_name
+                   FROM dogs d
+                   LEFT JOIN breeds b ON d.breed_id = b.id
+                   ${whereClause}
+                   ORDER BY d.created_at DESC`;
+
+    const result = await pool.query(query, params);
+    const listed = result.rows.filter((dog) => dog.is_for_sale);
+    const available = result.rows.filter((dog) => !dog.is_for_sale);
+
+    res.json({ listed, available });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao carregar os seus anúncios de venda' });
+  }
+};
+
+const announceDogForSale = async (req, res) => {
+  const { id } = req.params;
+  const { sale_price, sale_description, sale_contact, sale_city } = req.body;
+
+  if (!sale_price || Number(sale_price) <= 0) {
+    return res.status(400).json({ error: 'Preço de venda inválido' });
+  }
+
+  try {
+    await ensureDogSaleSchema();
+
+    const dogResult = await pool.query(
+      'SELECT id, breeder_id, owner_id FROM dogs WHERE id = $1',
+      [id]
+    );
+
+    if (!dogResult.rows.length) {
+      return res.status(404).json({ error: 'Cão não encontrado' });
+    }
+
+    const dog = dogResult.rows[0];
+    const isPrivileged = req.user?.user_type === 'admin' || req.user?.user_type === 'registration_agent';
+    const isOwner = String(dog.breeder_id) === String(req.user.id) || String(dog.owner_id) === String(req.user.id);
+
+    if (!isPrivileged && !isOwner) {
+      return res.status(403).json({ error: 'Sem permissão para anunciar este cão' });
+    }
+
+    const result = await pool.query(
+      `UPDATE dogs
+       SET is_for_sale = TRUE,
+           sale_price = $1,
+           sale_description = $2,
+           sale_contact = $3,
+           sale_city = $4,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5
+       RETURNING id, registration_id, name, sale_price, sale_description, sale_contact, sale_city`,
+      [
+        Number(sale_price),
+        sale_description ? String(sale_description).trim() || null : null,
+        sale_contact ? String(sale_contact).trim() || null : null,
+        sale_city ? String(sale_city).trim() || null : null,
+        id,
+      ]
+    );
+
+    res.json({ message: 'Cão anunciado para venda com sucesso', dog: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao anunciar cão para venda' });
+  }
+};
+
+const removeDogFromSale = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await ensureDogSaleSchema();
+
+    const dogResult = await pool.query(
+      'SELECT id, breeder_id, owner_id FROM dogs WHERE id = $1',
+      [id]
+    );
+
+    if (!dogResult.rows.length) {
+      return res.status(404).json({ error: 'Cão não encontrado' });
+    }
+
+    const dog = dogResult.rows[0];
+    const isPrivileged = req.user?.user_type === 'admin' || req.user?.user_type === 'registration_agent';
+    const isOwner = String(dog.breeder_id) === String(req.user.id) || String(dog.owner_id) === String(req.user.id);
+
+    if (!isPrivileged && !isOwner) {
+      return res.status(403).json({ error: 'Sem permissão para remover este anúncio' });
+    }
+
+    await pool.query(
+      `UPDATE dogs
+       SET is_for_sale = FALSE,
+           sale_price = NULL,
+           sale_description = NULL,
+           sale_contact = NULL,
+           sale_city = NULL,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $1`,
+      [id]
+    );
+
+    res.json({ message: 'Anúncio removido com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao remover anúncio' });
+  }
+};
+
 module.exports = {
   getAllDogs,
   getDogById,
@@ -753,4 +937,8 @@ module.exports = {
   transferDog,
   getAvailableBreeders,
   getBreederTransferOverview,
+  getPublicDogsForSale,
+  getMySaleDogs,
+  announceDogForSale,
+  removeDogFromSale,
 };
