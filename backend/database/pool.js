@@ -1,6 +1,5 @@
 const path = require('path');
 const { Pool } = require('pg');
-const Database = require('better-sqlite3');
 require('dotenv').config();
 const getPgConfig = require('./connectionConfig');
 
@@ -9,6 +8,7 @@ const DB_CLIENT = (process.env.DB_CLIENT || 'sqlite').toLowerCase();
 const toSqliteSql = (sql) => String(sql || '').replace(/\$\d+/g, '?');
 
 const createSqliteAdapter = () => {
+  const Database = require('better-sqlite3');
   const dbFile = process.env.SQLITE_PATH || path.join(__dirname, '..', 'rcna.db');
   const db = new Database(dbFile);
   db.pragma('foreign_keys = ON');

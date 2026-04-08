@@ -4,9 +4,9 @@ set -euo pipefail
 echo "[Render build] Instalando dependencias do backend..."
 cd backend
 if [ -f package-lock.json ]; then
-  npm ci --omit=dev
+  npm ci --omit=dev --omit=optional
 else
-  npm install --omit=dev
+  npm install --omit=dev --omit=optional
 fi
 
 echo "[Render build] Instalando dependencias do frontend..."
