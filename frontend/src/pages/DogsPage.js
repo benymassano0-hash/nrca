@@ -6,6 +6,7 @@ function DogsPage() {
   const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
   const isOperationPanel = currentUser?.user_type === 'admin' || currentUser?.user_type === 'registration_agent';
   const isBreeder = currentUser?.user_type === 'breeder';
+  const canDeleteDogs = currentUser?.user_type === 'admin';
   const [breederProfile, setBreederProfile] = useState(null);
   const [dogs, setDogs] = useState([]);
   const [breeds, setBreeds] = useState([]);
@@ -200,6 +201,28 @@ function DogsPage() {
       setError(apiMessage || 'Erro ao adicionar cão');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDeleteDog = async (dog) => {
+    const confirmDelete = window.confirm(
+      `Eliminar o cão ${dog.name} (${dog.registration_id})?\n\nEsta ação é irreversível.`
+    );
+    if (!confirmDelete) return;
+
+    setError('');
+    setSuccess('');
+
+    try {
+      await api.delete(`/dogs/${dog.id}`);
+      setDogs((prev) => prev.filter((d) => d.id !== dog.id));
+      setSuccess(`Cão ${dog.registration_id} eliminado com sucesso.`);
+    } catch (err) {
+      const apiMessage =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        (typeof err?.response?.data === 'string' ? err.response.data : '');
+      setError(apiMessage || 'Não foi possível eliminar o cão.');
     }
   };
 
@@ -415,6 +438,25 @@ function DogsPage() {
                 <Link to={`/dogs/${dog.id}`}>Ver</Link>
                 {' | '}
                 <Link to={`/pedigree/${dog.registration_id}`}>Pedigree</Link>
+                {canDeleteDogs && (
+                  <>
+                    {' | '}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDog(dog)}
+                      style={{
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#dc2626',
+                        cursor: 'pointer',
+                        fontWeight: 700,
+                        padding: 0,
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
