@@ -125,7 +125,14 @@ const importGlobalBreeds = async (req, res) => {
       }
     });
 
-    const uniqueImported = [...new Set(importedNames)].sort((a, b) => a.localeCompare(b));
+    const manualBreeds = [
+      'American Bully',
+      'American Bull',
+      'American Pit Bull Terrier',
+    ];
+
+    const uniqueImported = [...new Set([...importedNames, ...manualBreeds])]
+      .sort((a, b) => a.localeCompare(b));
 
     const existingResult = await pool.query('SELECT name FROM breeds');
     const existingSet = new Set(

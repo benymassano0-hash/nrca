@@ -5,6 +5,7 @@ function BreedsPage() {
   const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
   const isAdmin = currentUser?.user_type === 'admin';
   const [breeds, setBreeds] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -77,6 +78,14 @@ function BreedsPage() {
     }
   };
 
+  const normalizedSearch = String(searchTerm || '').trim().toLowerCase();
+  const filteredBreeds = breeds.filter((breed) => {
+    if (!normalizedSearch) return true;
+    const name = String(breed.name || '').toLowerCase();
+    const origin = String(breed.origin || '').toLowerCase();
+    return name.includes(normalizedSearch) || origin.includes(normalizedSearch);
+  });
+
   if (loading) return <div className="loading">Carregando...</div>;
 
   return (
@@ -94,6 +103,19 @@ function BreedsPage() {
       <button onClick={() => setShowForm(!showForm)}>
         {showForm ? 'Cancelar' : '+ Adicionar Raça'}
       </button>
+
+      <div style={{ marginTop: '20px', marginBottom: '10px' }}>
+        <input
+          type="text"
+          placeholder="🔍 Buscar raça (ex: american bull)"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ maxWidth: '380px' }}
+        />
+        <p style={{ marginTop: '8px' }}>
+          A mostrar {filteredBreeds.length} de {breeds.length} raças
+        </p>
+      </div>
 
       {showForm && (
         <div className="card" style={{ marginTop: '20px' }}>
@@ -162,7 +184,7 @@ function BreedsPage() {
       )}
 
       <div style={{ marginTop: '30px' }}>
-        {breeds.map(breed => (
+        {filteredBreeds.map(breed => (
           <div className="card" key={breed.id}>
             <h3>{breed.name}</h3>
             <p><strong>Origem:</strong> {breed.origin || '-'}</p>
