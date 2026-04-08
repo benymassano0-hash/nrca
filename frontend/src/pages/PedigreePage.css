@@ -1,0 +1,306 @@
+/* ── Pedigree Page Style ────────────────────────────────────────────────---- */
+
+.pedigree-print-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pedigree-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.pedigree-print-btn {
+  background: #111827;
+  color: white;
+  border: 1px solid #111827;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.pedigree-meta-card {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+}
+
+.pedigree-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 8px 16px;
+}
+
+.pedigree-meta-grid p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.pedigree-signature {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.pedigree-header {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.pedigree-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pedigree-dog-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pedigree-dog-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.pedigree-dog-details div {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pedigree-dog-details strong {
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+/* ── Árvore Genealógica ────────────────────────────────────────────────---- */
+
+.pedigree-tree-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.pedigree-tree {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  table-layout: fixed;
+}
+
+.pedigree-tree thead th {
+  background: #f3f4f6;
+  color: #111827;
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 700;
+  border: 1px solid #111827;
+  text-transform: uppercase;
+}
+
+.pedigree-tree tbody {
+  background: #fff;
+}
+
+.pedigree-tree tr {
+  border: 1px solid #111827;
+}
+
+.pedigree-tree td {
+  padding: 6px 4px;
+  vertical-align: middle;
+  border: 1px solid #111827;
+}
+
+/* ── Células da Árvore ──────────────────────────────────────────────---- */
+
+.current-dog-cell {
+  background: #fff;
+  border: 1px solid #111827 !important;
+}
+
+.sire-cell {
+  background: #fff;
+}
+
+.dam-cell {
+  background: #fff;
+}
+
+.gen-cell {
+  padding: 4px 2px;
+}
+
+.dog-box {
+  background: #fff;
+  border: 1px solid #111827;
+  border-radius: 2px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 0.75rem;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.pedigree-dog-photo {
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #111827;
+  margin-bottom: 4px;
+}
+
+.dog-box strong {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.dog-box small {
+  display: block;
+  color: #6b7280;
+  font-size: 0.7rem;
+}
+
+.dog-box.main {
+  background: #fff;
+  border: 2px solid #111827;
+  font-weight: 700;
+  font-size: 0.8rem;
+  min-height: 70px;
+}
+
+/* ── Responsivo ──────────────────────────────────────────────---- */
+
+@media (max-width: 1200px) {
+  .pedigree-tree {
+    font-size: 0.8rem;
+  }
+
+  .dog-box {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-height: 36px;
+  }
+
+  .pedigree-dog-photo {
+    height: 54px;
+  }
+
+  .dog-box.main {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pedigree-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pedigree-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pedigree-header {
+    padding: 16px;
+  }
+
+  .pedigree-dog-name {
+    font-size: 1.5rem;
+  }
+
+  .pedigree-dog-details {
+    grid-template-columns: 1fr;
+  }
+
+  .pedigree-tree-container {
+    overflow: auto;
+  }
+
+  .pedigree-tree {
+    font-size: 0.7rem;
+  }
+
+  .pedigree-tree thead th {
+    padding: 8px 4px;
+    font-size: 0.75rem;
+  }
+
+  .dog-box {
+    padding: 3px 4px;
+    min-height: 32px;
+    font-size: 0.65rem;
+  }
+
+  .pedigree-dog-photo {
+    height: 44px;
+  }
+
+  .dog-box small {
+    font-size: 0.6rem;
+  }
+
+  .dog-box.main {
+    min-height: 38px;
+    font-size: 0.7rem;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+  }
+
+  .navbar,
+  .pedigree-print-btn {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .pedigree-print-layout {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .pedigree-tree,
+  .pedigree-tree td,
+  .pedigree-tree th,
+  .dog-box {
+    border-color: #000 !important;
+  }
+
+  .pedigree-signature {
+    margin-top: 10px;
+    color: #000;
+    font-size: 10pt;
+  }
+}

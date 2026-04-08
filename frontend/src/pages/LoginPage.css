@@ -1,0 +1,136 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(13, 148, 136, 0.22), transparent 36%),
+    radial-gradient(circle at 88% 80%, rgba(245, 158, 11, 0.22), transparent 32%),
+    linear-gradient(135deg, #f8fafc 0%, #ecfeff 100%);
+}
+
+.login-card {
+  width: min(460px, 100%);
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #dbeafe;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
+  padding: 32px;
+}
+
+.login-card h2 {
+  margin: 0;
+  text-align: center;
+  color: #0f172a;
+  font-size: 1.7rem;
+}
+
+.login-subtitle {
+  margin: 8px 0 22px;
+  text-align: center;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.login-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-group {
+  display: grid;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.login-submit {
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(13, 148, 136, 0.26);
+}
+
+.login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #9f1239;
+  font-size: 0.92rem;
+}
+
+.login-help {
+  margin: 16px 0 0;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+.payment-notice {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid #99f6e4;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 100%);
+  color: #134e4a;
+}
+
+.payment-notice h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: #115e59;
+}
+
+.payment-notice p {
+  margin: 6px 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 520px) {
+  .login-card {
+    padding: 24px;
+    border-radius: 14px;
+  }
+}

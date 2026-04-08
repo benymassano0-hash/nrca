@@ -1,0 +1,477 @@
+/* Anunciar Evento Page Styles */
+
+.anunciar-evento-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.anunciar-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #d35400 0%, #ba4a00 100%);
+  color: white;
+  border-radius: 10px;
+}
+
+.anunciar-header h1 {
+  font-size: 2.5em;
+  margin: 0 0 10px 0;
+}
+
+.anunciar-header p {
+  font-size: 1.1em;
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* Mensagens */
+.message {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  animation: slideDown 0.3s ease;
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Layout de Conteúdo */
+.anunciar-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Seção de Formulário */
+.anunciar-form-section {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.anunciar-form-section h2 {
+  color: #1a1a1a;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.6em;
+  border-bottom: 3px solid #d35400;
+  padding-bottom: 10px;
+}
+
+/* Formulário */
+.anunciar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #d35400;
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Botões do Formulário */
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-submit {
+  background: #d35400;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.btn-submit:hover {
+  background: #ba4a00;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+}
+
+.btn-cancel {
+  background: #ecf0f1;
+  color: #333;
+  border: 2px solid #ddd;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background: #ddd;
+}
+
+/* Informações do Formulário */
+.form-info {
+  background: #f0f4f8;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  border-left: 4px solid #d35400;
+}
+
+.form-info p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.form-info strong {
+  color: #d35400;
+}
+
+/* Seção Meus Eventos */
+.meus-eventos-section {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.meus-eventos-section h2 {
+  color: #1a1a1a;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.6em;
+  border-bottom: 3px solid #d35400;
+  padding-bottom: 10px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 1.1em;
+}
+
+/* Lista de Eventos */
+.eventos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.evento-item {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.evento-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.evento-item.status-draft {
+  border-left: 4px solid #ffc107;
+}
+
+.evento-item.status-published {
+  border-left: 4px solid #17a2b8;
+}
+
+.evento-item.status-completed {
+  border-left: 4px solid #28a745;
+}
+
+.evento-item.status-cancelled {
+  border-left: 4px solid #dc3545;
+  opacity: 0.7;
+}
+
+/* Header do Evento */
+.evento-header {
+  margin-bottom: 15px;
+}
+
+.evento-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.evento-item h3 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 1.3em;
+}
+
+.evento-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.badge.status-draft {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge.status-published {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.badge.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Detalhes do Evento */
+.evento-details {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 0.95em;
+}
+
+.evento-details p {
+  margin: 8px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Ações do Evento */
+.evento-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-edit,
+.btn-publish,
+.btn-delete,
+.btn-cancel {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+
+.btn-edit {
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #138496;
+}
+
+.btn-publish {
+  background: #28a745;
+  color: white;
+}
+
+.btn-publish:hover {
+  background: #218838;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+.btn-cancel {
+  background: #ffc107;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background: #e0a800;
+}
+
+.status-text {
+  color: #999;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .anunciar-content {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .anunciar-evento-container {
+    padding: 15px;
+  }
+
+  .anunciar-header {
+    padding: 20px 15px;
+  }
+
+  .anunciar-header h1 {
+    font-size: 1.8em;
+  }
+
+  .anunciar-header p {
+    font-size: 1em;
+  }
+
+  .anunciar-form-section,
+  .meus-eventos-section {
+    padding: 20px;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .evento-title-section {
+    flex-direction: column;
+  }
+
+  .evento-badges {
+    flex-wrap: wrap;
+  }
+
+  .evento-actions {
+    justify-content: flex-start;
+  }
+
+  .btn-edit,
+  .btn-publish,
+  .btn-delete,
+  .btn-cancel {
+    flex: 1;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .anunciar-header h1 {
+    font-size: 1.4em;
+  }
+
+  .anunciar-form-section h2,
+  .meus-eventos-section h2 {
+    font-size: 1.3em;
+  }
+
+  .evento-item h3 {
+    font-size: 1.1em;
+  }
+
+  .evento-details {
+    font-size: 0.85em;
+  }
+
+  .evento-actions {
+    flex-direction: column;
+  }
+
+  .btn-edit,
+  .btn-publish,
+  .btn-delete,
+  .btn-cancel {
+    width: 100%;
+  }
+}

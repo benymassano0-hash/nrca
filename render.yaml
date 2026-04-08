@@ -1,0 +1,28 @@
+databases:
+  - name: rcna-db
+    databaseName: rcna
+    user: rcna
+
+services:
+  - type: web
+    name: rcna
+    runtime: node
+    rootDir: .
+    autoDeploy: true
+    buildCommand: bash render-build.sh
+    startCommand: bash render-start.sh
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_CLIENT
+        value: postgres
+      - key: DB_SSL
+        value: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rcna-db
+          property: connectionString
+      - key: FRONTEND_ORIGINS
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true

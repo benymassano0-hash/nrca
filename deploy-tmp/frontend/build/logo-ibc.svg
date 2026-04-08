@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">IBC - Sistema de Pedigree do Brasil</title>
+  <desc id="desc">Logo institucional do IBC com escudo dourado e texto principal.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7d06f" />
+      <stop offset="50%" stop-color="#d7a43d" />
+      <stop offset="100%" stop-color="#9b6a1b" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#bg)" rx="28" />
+
+  <g transform="translate(600 340)">
+    <path d="M-220 -190 L220 -190 L260 0 L0 220 L-260 0 Z" fill="#1f2937" stroke="url(#gold)" stroke-width="16" />
+    <path d="M-165 -130 L165 -130 L192 0 L0 162 L-192 0 Z" fill="#111827" stroke="#f5c76a" stroke-width="8" />
+
+    <text x="0" y="-18" fill="url(#gold)" font-size="100" font-weight="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif">IBC</text>
+    <text x="0" y="55" fill="#f8fafc" font-size="38" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif">SISTEMA DE PEDIGREE</text>
+    <text x="0" y="100" fill="#f8fafc" font-size="34" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif">DO BRASIL</text>
+
+    <g transform="translate(0 155)">
+      <circle cx="0" cy="0" r="26" fill="#f6d17a" />
+      <circle cx="-22" cy="-22" r="9" fill="#f6d17a" />
+      <circle cx="0" cy="-32" r="9" fill="#f6d17a" />
+      <circle cx="22" cy="-22" r="9" fill="#f6d17a" />
+      <circle cx="-38" cy="-6" r="9" fill="#f6d17a" />
+      <circle cx="38" cy="-6" r="9" fill="#f6d17a" />
+    </g>
+  </g>
+
+  <text x="600" y="648" fill="#e5e7eb" font-size="24" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif">Registro Canino e Pedigree Oficial</text>
+</svg>

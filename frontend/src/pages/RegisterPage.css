@@ -1,0 +1,398 @@
+/* Register Page Styles */
+
+.register-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  width: 100%;
+  align-items: start;
+}
+
+/* Coluna Esquerda - Info */
+.register-info {
+  color: white;
+}
+
+.info-header {
+  margin-bottom: 40px;
+}
+
+.info-header h1 {
+  font-size: 2.5em;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+}
+
+.info-header p {
+  font-size: 1.2em;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Benefícios */
+.benefits {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.benefits h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefits li {
+  padding: 8px 0;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+/* Tipos de Conta */
+.types-info h3 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+.type-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  backdrop-filter: blur(10px);
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.type-box strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.05em;
+}
+
+.type-box p {
+  margin: 0;
+  font-size: 0.95em;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* Coluna Direita - Formulário */
+.register-form-container {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  font-size: 2em;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.form-header p {
+  color: #777;
+  margin: 0;
+  font-size: 1em;
+}
+
+/* Alerts */
+.alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-left: 4px solid;
+  animation: slideDown 0.3s ease;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border-color: #dc3545;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border-color: #28a745;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Formulário */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-section h3 {
+  font-size: 1.1em;
+  color: #333;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #667eea;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Seletor de Tipo */
+.type-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.type-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.type-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.type-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.type-label strong {
+  color: #333;
+  font-size: 1em;
+}
+
+.type-label small {
+  color: #777;
+  font-size: 0.85em;
+}
+
+.type-option:hover {
+  border-color: #667eea;
+  background: #f9f9f9;
+}
+
+.type-option input[type="radio"]:checked + .type-label strong {
+  color: #667eea;
+}
+
+/* Termos */
+.terms-section {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: #555;
+  line-height: 1.5;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Ações */
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-submit {
+  padding: 14px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Login Link */
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #777;
+  font-size: 0.95em;
+}
+
+.login-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: #764ba2;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .register-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .register-info {
+    order: 2;
+  }
+
+  .register-form-container {
+    order: 1;
+    padding: 30px;
+  }
+
+  .info-header h1 {
+    font-size: 1.8em;
+  }
+
+  .form-header h2 {
+    font-size: 1.6em;
+  }
+}
+
+@media (max-width: 600px) {
+  .register-page-container {
+    padding: 15px;
+  }
+
+  .register-form-container {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .form-header h2 {
+    font-size: 1.4em;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .info-header h1 {
+    font-size: 1.5em;
+  }
+
+  .benefits,
+  .type-box {
+    padding: 15px;
+  }
+
+  .type-option {
+    padding: 12px;
+  }
+
+  .register-form {
+    gap: 20px;
+  }
+
+  .form-section {
+    gap: 12px;
+  }
+}
