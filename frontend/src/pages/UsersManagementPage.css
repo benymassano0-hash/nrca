@@ -436,6 +436,30 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Organização dos botões para melhor consistência no Chrome */
+.actions-col .view-btn,
+.actions-col .delete-agent-btn,
+.actions-col .toggle-breeder-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  line-height: 1.1;
+  border-radius: 6px;
+}
+
+.actions-col .view-info-btn {
+  min-width: 118px;
+}
+
+.actions-col .delete-agent-btn,
+.actions-col .toggle-breeder-btn {
+  margin-left: 0;
 }
 
 .number-col {
