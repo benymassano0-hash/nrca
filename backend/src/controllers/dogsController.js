@@ -23,6 +23,7 @@ const ensureBreederCommercialSchema = async () => {
     breederCommercialSchemaPromise = (async () => {
       await ensureColumn('users', 'dog_limit', 'dog_limit INTEGER NOT NULL DEFAULT 1');
       await ensureColumn('users', 'tickets', 'tickets INTEGER NOT NULL DEFAULT 0');
+      await ensureColumn('dogs', 'qr_code_url', 'qr_code_url VARCHAR(255)');
       await pool.query(`
         CREATE TABLE IF NOT EXISTS breeder_ticket_transactions (
           id SERIAL PRIMARY KEY,

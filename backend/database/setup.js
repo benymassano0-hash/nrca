@@ -69,6 +69,7 @@ const queries = `
     health_status TEXT,
     certifications TEXT,
     photo_url VARCHAR(255),
+    qr_code_url VARCHAR(255),
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
