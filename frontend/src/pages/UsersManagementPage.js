@@ -620,10 +620,11 @@ function UsersManagementPage() {
                   </td>
                   <td className="actions-col">
                     <button 
-                      className="view-btn"
+                      className="view-btn view-info-btn"
                       onClick={() => setSelectedUser(user)}
+                      title={user.user_type === 'breeder' ? 'Ver informações do criador' : 'Ver informações do utilizador'}
                     >
-                      👁️ Ver
+                      {user.user_type === 'breeder' ? 'ℹ️ Info Criador' : '👁️ Ver'}
                     </button>
                     <button
                       className="view-btn"

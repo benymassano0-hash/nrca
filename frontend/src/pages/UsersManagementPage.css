@@ -372,6 +372,14 @@
   transform: translateY(-2px);
 }
 
+.view-info-btn {
+  background: #0f766e;
+}
+
+.view-info-btn:hover {
+  background: #0d5f5a;
+}
+
 .delete-agent-btn {
   margin-left: 8px;
   padding: 6px 10px;
