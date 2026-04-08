@@ -18,6 +18,7 @@ import AnunciarVendaPage from './pages/AnunciarVendaPage';
 import CaesVendaPage from './pages/CaesVendaPage';
 import UsersManagementPage from './pages/UsersManagementPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import PendingApprovalsPage from './pages/PendingApprovalsPage';
 import PricesPage from './pages/PricesPage';
 
 // Componentes
@@ -108,6 +109,10 @@ function App() {
           <Route 
             path="/admin/usuarios" 
             element={<PrivateRoute user={user} requiredRole="admin"><UsersManagementPage /></PrivateRoute>} 
+          />
+          <Route 
+            path="/admin/aprovacoes" 
+            element={<PrivateRoute user={user} requiredRole="admin"><PendingApprovalsPage /></PrivateRoute>} 
           />
         </Routes>
       </div>

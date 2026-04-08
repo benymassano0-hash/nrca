@@ -1,0 +1,358 @@
+/* Pending Approvals Page */
+
+.approvals-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* Cabeçalho */
+.approvals-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 28px 28px 24px;
+  background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+  color: white;
+  border-radius: 12px;
+}
+
+.approvals-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.back-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.approvals-header h1 {
+  font-size: 1.9em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pending-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #dc2626;
+  font-size: 0.55em;
+  font-weight: 900;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 0 4px;
+}
+
+.approvals-header p {
+  margin: 0;
+  font-size: 1em;
+  opacity: 0.9;
+}
+
+.refresh-btn {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9em;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Erro */
+.approvals-error {
+  padding: 12px 16px;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Loading */
+.approvals-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 80px 20px;
+  color: #6b7280;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Contador info */
+.approvals-count-info {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 0.95em;
+}
+
+/* Estado vazio */
+.approvals-empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-icon {
+  font-size: 4em;
+  margin-bottom: 16px;
+}
+
+.approvals-empty h2 {
+  font-size: 1.6em;
+  color: #1f2937;
+  margin: 0 0 10px;
+}
+
+.approvals-empty p {
+  color: #6b7280;
+  font-size: 1.05em;
+  margin: 0 0 24px;
+}
+
+.link-to-users {
+  display: inline-block;
+  padding: 10px 22px;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.link-to-users:hover {
+  background: #5a67d8;
+}
+
+/* Grid de cards */
+.approvals-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card de aprovação */
+.approval-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 24px;
+  transition: box-shadow 0.2s, opacity 0.2s;
+}
+
+.approval-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.approval-card--busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Avatar */
+.approval-avatar {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-initials {
+  color: white;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+/* Info do utilizador */
+.approval-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.approval-name {
+  margin: 0 0 2px;
+  font-size: 1.1em;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.approval-username {
+  color: #6b7280;
+  font-size: 0.9em;
+}
+
+.approval-details {
+  margin: 10px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+  color: #374151;
+}
+
+.detail-icon {
+  font-size: 0.9em;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.user-type-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #ede9fe;
+  color: #5b21b6;
+  border-radius: 20px;
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
+/* Botões de acção */
+.approval-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-self: center;
+}
+
+.btn-approve {
+  padding: 10px 20px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95em;
+  white-space: nowrap;
+  transition: background 0.2s;
+  min-width: 140px;
+}
+
+.btn-approve:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.btn-approve:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-reject {
+  padding: 10px 20px;
+  background: white;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95em;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+  min-width: 140px;
+}
+
+.btn-reject:hover:not(:disabled) {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-reject:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .approvals-header {
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 18px;
+  }
+
+  .approvals-header h1 {
+    font-size: 1.4em;
+  }
+
+  .refresh-btn {
+    width: 100%;
+  }
+
+  .approval-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 18px 16px;
+  }
+
+  .approval-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .approval-actions {
+    flex-direction: row;
+    align-self: stretch;
+  }
+
+  .btn-approve,
+  .btn-reject {
+    flex: 1;
+    min-width: unset;
+  }
+}

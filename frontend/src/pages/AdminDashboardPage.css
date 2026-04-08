@@ -65,6 +65,20 @@
 .admin-stat-card.teal   { background: linear-gradient(135deg, #0891b2, #22d3ee); }
 .admin-stat-card.red    { background: linear-gradient(135deg, #dc2626, #f87171); }
 
+/* Card de estatística clicável (link) */
+.admin-stat-card--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.admin-stat-card--link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Card de aprovações na grid de acções */
+.action-approvals { border-top: 3px solid #dc2626; }
+
 .stat-icon {
   font-size: 2rem;
 }

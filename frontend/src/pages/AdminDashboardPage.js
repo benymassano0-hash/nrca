@@ -241,13 +241,13 @@ function AdminDashboardPage({ user }) {
             </div>
           </div>
           {stats.pendingVerification > 0 && (
-            <div className="admin-stat-card red">
+            <Link to="/admin/aprovacoes" className="admin-stat-card red admin-stat-card--link">
               <div className="stat-icon">⏳</div>
               <div>
                 <div className="stat-num">{stats.pendingVerification}</div>
                 <div className="stat-label">A aguardar verificação</div>
               </div>
-            </div>
+            </Link>
           )}
         </div>
       )}
@@ -295,6 +295,13 @@ function AdminDashboardPage({ user }) {
       <div className="admin-section">
         <h2>⚡ Acções Rápidas</h2>
         <div className="admin-actions-grid">
+          {stats && stats.pendingVerification > 0 && (
+            <Link to="/admin/aprovacoes" className="admin-action-card action-approvals">
+              <span className="action-icon">🕐</span>
+              <span className="action-title">Aprovações Pendentes</span>
+              <span className="action-desc">{stats.pendingVerification} {stats.pendingVerification === 1 ? 'conta aguarda' : 'contas aguardam'} aprovação</span>
+            </Link>
+          )}
           <Link to="/admin/usuarios" className="admin-action-card action-users">
             <span className="action-icon">👥</span>
             <span className="action-title">Gerir Utilizadores</span>
