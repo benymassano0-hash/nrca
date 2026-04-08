@@ -11,11 +11,7 @@ fi
 
 echo "[Render build] Instalando dependencias do frontend..."
 cd ../frontend
-if [ -f package-lock.json ]; then
-  npm ci
-else
-  npm install
-fi
+npm install --legacy-peer-deps
 
 echo "[Render build] Compilando frontend..."
 npm run build
