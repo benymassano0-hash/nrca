@@ -113,6 +113,21 @@ function DashboardPage({ user }) {
   const availableTickets = Number(breederWalletInfo?.tickets || 0);
   const breederCurrentDogs = Number(stats?.totalDogs || 0);
 
+  const handleRequestTicketTopUp = () => {
+    const adminPhone = '351935013630';
+    const breederName = user.full_name || user.username;
+    const message = [
+      'Olá, gostaria de carregar tickets na minha conta RCA.',
+      `Criador: ${breederName}`,
+      `Username: ${user.username}`,
+      `Tickets atuais: ${availableTickets}`,
+      'Quantidade de tickets pretendida: '
+    ].join('\n');
+
+    const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -155,6 +170,11 @@ function DashboardPage({ user }) {
             Registos já feitos: <strong>{breederCurrentDogs}</strong>
             {' '}| Tickets na conta: <strong>{availableTickets}</strong>
           </p>
+          <div className="tickets-actions">
+            <button className="ticket-topup-btn" onClick={handleRequestTicketTopUp}>
+              🎟️ Carregar Tickets
+            </button>
+          </div>
         </div>
       )}
 
