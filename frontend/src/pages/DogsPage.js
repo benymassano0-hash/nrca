@@ -6,6 +6,7 @@ function DogsPage() {
   const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
   const isOperationPanel = currentUser?.user_type === 'admin' || currentUser?.user_type === 'registration_agent';
   const isBreeder = currentUser?.user_type === 'breeder';
+  const canActAsBreeder = currentUser?.user_type === 'breeder' || currentUser?.user_type === 'admin';
   const canDeleteDogs = currentUser?.user_type === 'admin';
   const [breederProfile, setBreederProfile] = useState(null);
   const [dogs, setDogs] = useState([]);
@@ -74,7 +75,7 @@ function DogsPage() {
   };
 
   const loadNextRegistrationId = async () => {
-    if (!isOperationPanel && !isBreeder) {
+    if (!isOperationPanel && !canActAsBreeder) {
       return;
     }
 
@@ -87,7 +88,7 @@ function DogsPage() {
   };
 
   const loadMyProfile = async () => {
-    if (!isBreeder) {
+    if (!canActAsBreeder) {
       return;
     }
 
@@ -189,7 +190,11 @@ function DogsPage() {
       });
       setSelectedPhoto(null);
       setPhotoPreviewUrl('');
-      setSuccess(`Cão registado com sucesso. ID gerado: ${response.data.registration_id}. Foi consumido 1 ticket.`);
+      setSuccess(
+        response?.data?.message
+          ? `${response.data.message} ID gerado: ${response.data.registration_id}.`
+          : `Cão registado com sucesso. ID gerado: ${response.data.registration_id}.`
+      );
       await loadMyProfile();
       loadDogs();
       loadNextRegistrationId();

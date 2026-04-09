@@ -383,7 +383,7 @@ const searchPublicPedigree = async (req, res) => {
               mother.photo_url as mother_photo_url
       FROM dogs d
       LEFT JOIN breeds b ON d.breed_id = b.id
-      LEFT JOIN users u ON d.owner_id = u.id
+      LEFT JOIN users u ON d.breeder_id = u.id
       LEFT JOIN dogs father ON d.father_id = father.id
       LEFT JOIN dogs mother ON d.mother_id = mother.id
       WHERE 1=1
@@ -464,7 +464,7 @@ const getPublicPedigreeDetail = async (req, res) => {
               maternal_grandmother.photo_url as maternal_grandmother_photo_url
        FROM dogs d
        LEFT JOIN breeds b ON d.breed_id = b.id
-       LEFT JOIN users u ON d.owner_id = u.id
+      LEFT JOIN users u ON d.breeder_id = u.id
        LEFT JOIN dogs father ON d.father_id = father.id
        LEFT JOIN dogs mother ON d.mother_id = mother.id
        LEFT JOIN dogs paternal_grandfather ON father.father_id = paternal_grandfather.id

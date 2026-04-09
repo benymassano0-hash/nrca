@@ -187,6 +187,8 @@ const createDog = async (req, res) => {
   const { name, breed_id, birth_date, gender, color, microchip_id, 
           father_id, mother_id, health_status, notes, breeder_name } = req.body;
   const photo_url = req.file ? `/uploads/dogs/${req.file.filename}` : null;
+  const normalizedBreederName = String(breeder_name || '').trim();
+  const executorIsPrivileged = req.user?.user_type === 'admin' || req.user?.user_type === 'registration_agent';
 
   const normalizedBirthDate = birth_date ? String(birth_date).trim() || null : null;
   const normalizedFatherId = father_id ? String(father_id).trim() || null : null;
@@ -237,12 +239,26 @@ const createDog = async (req, res) => {
       }
 
       breeder = requester;
+    } else if (req.user?.user_type === 'admin' && !normalizedBreederName) {
+      const requesterResult = await pool.query(
+        `SELECT id, full_name, username, kennel_name
+         FROM users
+         WHERE id = $1 AND user_type IN ('breeder', 'admin')
+         LIMIT 1`,
+        [req.user.id]
+      );
+
+      if (requesterResult.rows.length === 0) {
+        return res.status(403).json({ error: 'Conta de administrador/criador não encontrada.' });
+      }
+
+      breeder = requesterResult.rows[0];
     } else {
-      if (!String(breeder_name || '').trim()) {
+      if (!normalizedBreederName) {
         return res.status(400).json({ error: 'Campos obrigatórios: breeder_name' });
       }
 
-      const breederInput = String(breeder_name).trim();
+      const breederInput = normalizedBreederName;
       const breederNameNormalized = breederInput.toLowerCase();
       let breederResult = await pool.query(
         `SELECT id, full_name, username, kennel_name
@@ -294,8 +310,6 @@ const createDog = async (req, res) => {
 
       breeder = breederResult.rows[0];
     }
-
-    const executorIsPrivileged = req.user?.user_type === 'admin' || req.user?.user_type === 'registration_agent';
     const client = await pool.connect();
     let registration_id;
     let result;
