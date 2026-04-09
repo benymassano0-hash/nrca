@@ -298,6 +298,67 @@ const searchPublicPedigree = async (req, res) => {
   }
 
   try {
+    // Se é busca por canil, primeiro encontrar o utilizador com esse canil
+    if (kennel_name && !dog_name && !dog_id && !breeder_name) {
+      const userResult = await pool.query(
+        `SELECT id, full_name, email, phone, kennel_name, city, province
+         FROM users
+         WHERE kennel_name ILIKE '%' || $1 || '%' AND user_type != 'viewer'`,
+        [kennel_name]
+      );
+
+      if (userResult.rows.length === 0) {
+        return res.json({
+          message: 'Nenhum canil encontrado com esse nome',
+          results: []
+        });
+      }
+
+      // Para cada utilizador encontrado, buscar seus cães
+      const allDogs = [];
+      for (const kennelOwner of userResult.rows) {
+        const dogsResult = await pool.query(
+          `SELECT d.id, 
+                  d.name,
+                  d.registration_id,
+                  d.birth_date,
+                  d.gender,
+                  d.color,
+                  d.photo_url,
+                  d.kennel_name,
+                  b.name as breed_name,
+                  $1::UUID as owner_id,
+                  $2::TEXT as owner_name,
+                  $3::TEXT as owner_email,
+                  $4::TEXT as owner_phone,
+                  $5::TEXT as owner_city,
+                  $6::TEXT as owner_province,
+                  father.name as father_name,
+                  father.registration_id as father_registration_id,
+                  father.photo_url as father_photo_url,
+                  mother.name as mother_name,
+                  mother.registration_id as mother_registration_id,
+                  mother.photo_url as mother_photo_url
+           FROM dogs d
+           LEFT JOIN breeds b ON d.breed_id = b.id
+           LEFT JOIN dogs father ON d.father_id = father.id
+           LEFT JOIN dogs mother ON d.mother_id = mother.id
+           WHERE (d.owner_id = $1 OR d.breeder_id = $1)
+           ORDER BY d.created_at DESC`,
+          [kennelOwner.id, kennelOwner.full_name, kennelOwner.email, kennelOwner.phone, kennelOwner.city, kennelOwner.province]
+        );
+
+        allDogs.push(...dogsResult.rows);
+      }
+
+      return res.json({
+        count: allDogs.length,
+        results: allDogs,
+        kennelInfo: userResult.rows
+      });
+    }
+
+    // Busca padrão (por nome, ID ou criador)
     let query = `
       SELECT d.id, 
              d.name,
@@ -309,6 +370,11 @@ const searchPublicPedigree = async (req, res) => {
              b.name as breed_name,
              u.full_name as breeder_name,
              u.id as breeder_id,
+             u.kennel_name,
+             u.email,
+             u.phone,
+             u.city,
+             u.province,
              father.name as father_name,
              father.registration_id as father_registration_id,
               father.photo_url as father_photo_url,
@@ -329,7 +395,7 @@ const searchPublicPedigree = async (req, res) => {
     if (dog_name) {
       paramCount++;
       // Use case-insensitive search
-      query += ` AND d.name LIKE '%' || $${paramCount} || '%'`;
+      query += ` AND d.name ILIKE '%' || $${paramCount} || '%'`;
       params.push(dog_name);
     }
 
@@ -341,14 +407,8 @@ const searchPublicPedigree = async (req, res) => {
 
     if (breeder_name) {
       paramCount++;
-      query += ` AND u.full_name LIKE '%' || $${paramCount} || '%'`;
+      query += ` AND u.full_name ILIKE '%' || $${paramCount} || '%'`;
       params.push(breeder_name);
-    }
-
-    if (kennel_name) {
-      paramCount++;
-      query += ` AND d.kennel_name LIKE '%' || $${paramCount} || '%'`;
-      params.push(kennel_name);
     }
 
     query += ` ORDER BY d.created_at DESC LIMIT 50`;

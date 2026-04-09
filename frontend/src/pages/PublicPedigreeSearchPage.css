@@ -185,6 +185,77 @@
   gap: 20px;
 }
 
+.kennel-info-cards {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kennel-info-cards h2 {
+  color: #667eea;
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+}
+
+.kennel-card {
+  background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.kennel-card:last-child {
+  margin-bottom: 0;
+}
+
+.kennel-card:hover {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transform: translateX(4px);
+}
+
+.kennel-header {
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.kennel-header h3 {
+  color: #667eea;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.kennel-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.kennel-details p {
+  margin: 0;
+  color: #555;
+}
+
+.kennel-details strong {
+  color: #333;
+}
+
+.kennel-details a {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.kennel-details a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
 .result-card {
   background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
   border: 1px solid #e0e0e0;

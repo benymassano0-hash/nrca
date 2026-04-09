@@ -6,6 +6,7 @@ function PublicPedigreeSearchPage() {
   const [searchType, setSearchType] = useState('dog_name');
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState([]);
+  const [kennelInfo, setKennelInfo] = useState(null);
   const [selectedDog, setSelectedDog] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,6 +31,7 @@ function PublicPedigreeSearchPage() {
     setMessage('');
     setLoading(true);
     setResults([]);
+    setKennelInfo(null);
     setSelectedDog(null);
 
     try {
@@ -51,6 +53,9 @@ function PublicPedigreeSearchPage() {
         setMessage('Nenhum cão encontrado com esses critérios. Tente outro termo de busca.');
       } else {
         setResults(response.data.results);
+        if (response.data.kennelInfo) {
+          setKennelInfo(response.data.kennelInfo);
+        }
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Erro ao buscar pedigree');
@@ -319,6 +324,24 @@ function PublicPedigreeSearchPage() {
         </div>
       ) : results.length > 0 ? (
         <div className="results-section">
+          {kennelInfo && kennelInfo.length > 0 && (
+            <div className="kennel-info-cards">
+              <h2>🏠 Informações do Canil</h2>
+              {kennelInfo.map((kennel, idx) => (
+                <div key={idx} className="kennel-card">
+                  <div className="kennel-header">
+                    <h3>{kennel.kennel_name}</h3>
+                  </div>
+                  <div className="kennel-details">
+                    <p><strong>Proprietário:</strong> {kennel.full_name}</p>
+                    {kennel.email && <p><strong>Email:</strong> <a href={`mailto:${kennel.email}`}>{kennel.email}</a></p>}
+                    {kennel.phone && <p><strong>Telefone:</strong> <a href={`tel:${kennel.phone}`}>{kennel.phone}</a></p>}
+                    {kennel.city && <p><strong>Localização:</strong> {kennel.city}{kennel.province ? `, ${kennel.province}` : ''}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           <h2>Resultados da Busca ({results.length})</h2>
           <div className="results-grid">
             {results.map(dog => (
