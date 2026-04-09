@@ -35,12 +35,13 @@ function AdminDashboardPage({ user }) {
 
   const loadAll = async () => {
     try {
-      const [dogsRes, breedingsRes, breedsRes, usersRes, eventsRes] = await Promise.all([
+      const [dogsRes, breedingsRes, breedsRes, usersRes, eventsRes, analyticsRes] = await Promise.all([
         api.get('/dogs'),
         api.get('/breedings'),
         api.get('/breeds'),
         api.get('/users'),
         api.get('/events/published').catch(() => ({ data: [] })),
+        api.get('/analytics/summary').catch(() => ({ data: null })),
       ]);
 
       setStats({
@@ -49,6 +50,9 @@ function AdminDashboardPage({ user }) {
         totalBreeds: breedsRes.data.length,
         totalUsers: usersRes.data.length,
         totalEvents: eventsRes.data.length,
+        totalVisits: analyticsRes?.data?.total_visits || 0,
+        uniqueVisitors: analyticsRes?.data?.unique_visitors || 0,
+        uniqueVisitors24h: analyticsRes?.data?.unique_visitors_24h || 0,
         breeders: usersRes.data.filter(u => u.user_type === 'breeder').length,
         agents: usersRes.data.filter(u => u.user_type === 'registration_agent').length,
         admins: usersRes.data.filter(u => u.user_type === 'admin').length,
@@ -238,6 +242,14 @@ function AdminDashboardPage({ user }) {
             <div>
               <div className="stat-num">{stats.totalEvents}</div>
               <div className="stat-label">Eventos</div>
+            </div>
+          </div>
+          <div className="admin-stat-card indigo">
+            <div className="stat-icon">👀</div>
+            <div>
+              <div className="stat-num">{stats.uniqueVisitors}</div>
+              <div className="stat-label">Pessoas que viram o projeto</div>
+              <div className="stat-sub">{stats.totalVisits} visitas • {stats.uniqueVisitors24h} nas últimas 24h</div>
             </div>
           </div>
           {stats.pendingVerification > 0 && (

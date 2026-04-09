@@ -14,6 +14,7 @@ const eventsRoutes = require('./src/routes/events');
 const vaccinesRoutes = require('./src/routes/vaccines');
 const settingsRoutes = require('./src/routes/settings');
 const partnershipsRoutes = require('./src/routes/partnerships');
+const analyticsRoutes = require('./src/routes/analytics');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -68,6 +69,7 @@ app.use('/api/events', eventsRoutes);
 app.use('/api/vaccines', vaccinesRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/partnerships', partnershipsRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Servir Frontend React (build de produção)
 const frontendBuild = path.join(__dirname, '..', 'frontend', 'build');

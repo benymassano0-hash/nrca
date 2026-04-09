@@ -25,6 +25,7 @@ import ParceiriasPage from './pages/ParceiriasPage';
 // Componentes
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -46,6 +47,7 @@ function App() {
 
   return (
     <Router>
+      <AnalyticsTracker />
       <Navbar user={user} setUser={setUser} />
       <div className="container">
         <Routes>
