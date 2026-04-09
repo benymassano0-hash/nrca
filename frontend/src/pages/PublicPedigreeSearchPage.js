@@ -362,6 +362,7 @@ function PublicPedigreeSearchPage() {
                   <p><strong>Registo:</strong> {dog.registration_id || 'N/A'}</p>
                   <p><strong>Género:</strong> {dog.gender === 'M' ? '♂ Macho' : '♀ Fêmea'}</p>
                   <p><strong>Criador:</strong> {dog.breeder_name || 'N/A'}</p>
+                  {dog.kennel_name && <p><strong>Canil:</strong> {dog.kennel_name}</p>}
                   {dog.birth_date && (
                     <p><strong>Nasc:</strong> {new Date(dog.birth_date).toLocaleDateString('pt-PT')}</p>
                   )}
@@ -382,7 +383,7 @@ function PublicPedigreeSearchPage() {
       <div className="info-section">
         <h3>ℹ️ Como funciona</h3>
         <ul>
-          <li>✓ Searchable por <strong>nome do cão</strong>, <strong>registo</strong> ou <strong>criador</strong></li>
+          <li>✓ Busca por <strong>nome do cão</strong>, <strong>registo</strong>, <strong>criador</strong> ou <strong>canil</strong></li>
           <li>✓ Veja o <strong>pedigree completo</strong> com 3 gerações</li>
           <li>✓ <strong>Sem necessidade de conta</strong> - acesso público e livre</li>
           <li>✓ Informações sempre <strong>atualizadas</strong></li>
