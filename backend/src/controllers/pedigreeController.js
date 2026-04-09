@@ -288,12 +288,12 @@ const registerPedigree = async (req, res) => {
 
 // Busca pública de pedigrees (sem autenticação)
 const searchPublicPedigree = async (req, res) => {
-  const { dog_name, dog_id, breeder_name } = req.query;
+  const { dog_name, dog_id, breeder_name, kennel_name } = req.query;
 
   // Validar que pelo menos um parâmetro foi fornecido
-  if (!dog_name && !dog_id && !breeder_name) {
+  if (!dog_name && !dog_id && !breeder_name && !kennel_name) {
     return res.status(400).json({
-      error: 'Forneça pelo menos: dog_name (nome do cão), dog_id (ID do cão), ou breeder_name (nome do criador)'
+      error: 'Forneça pelo menos: dog_name (nome do cão), dog_id (ID do cão), breeder_name (nome do criador), ou kennel_name (nome do canil)'
     });
   }
 
@@ -343,6 +343,12 @@ const searchPublicPedigree = async (req, res) => {
       paramCount++;
       query += ` AND u.full_name LIKE '%' || $${paramCount} || '%'`;
       params.push(breeder_name);
+    }
+
+    if (kennel_name) {
+      paramCount++;
+      query += ` AND d.kennel_name LIKE '%' || $${paramCount} || '%'`;
+      params.push(kennel_name);
     }
 
     query += ` ORDER BY d.created_at DESC LIMIT 50`;

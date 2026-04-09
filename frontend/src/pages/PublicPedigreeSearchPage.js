@@ -41,6 +41,8 @@ function PublicPedigreeSearchPage() {
         params.append('dog_id', searchValue);
       } else if (searchType === 'breeder_name') {
         params.append('breeder_name', searchValue);
+      } else if (searchType === 'kennel_name') {
+        params.append('kennel_name', searchValue);
       }
 
       const response = await api.get(`/pedigree/public/search?${params.toString()}`);
@@ -252,6 +254,13 @@ function PublicPedigreeSearchPage() {
             >
               👤 Por Criador
             </button>
+            <button
+              type="button"
+              className={`tab-btn ${searchType === 'kennel_name' ? 'active' : ''}`}
+              onClick={() => setSearchType('kennel_name')}
+            >
+              🏠 Por Canil
+            </button>
           </div>
 
           <div className="search-input-group">
@@ -279,6 +288,15 @@ function PublicPedigreeSearchPage() {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder="Ex: João Silva, Maria Santos..."
+                className="search-input"
+              />
+            )}
+            {searchType === 'kennel_name' && (
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Ex: Canil Afrodite, Canil Rex..."
                 className="search-input"
               />
             )}
