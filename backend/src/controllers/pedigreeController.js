@@ -303,7 +303,7 @@ const searchPublicPedigree = async (req, res) => {
       const userResult = await pool.query(
         `SELECT id, full_name, email, phone, kennel_name, city, province
          FROM users
-         WHERE kennel_name ILIKE '%' || $1 || '%' AND user_type != 'viewer'`,
+         WHERE LOWER(COALESCE(kennel_name, '')) LIKE '%' || LOWER($1) || '%' AND user_type != 'viewer'`,
         [kennel_name]
       );
 
@@ -325,14 +325,14 @@ const searchPublicPedigree = async (req, res) => {
                   d.gender,
                   d.color,
                   d.photo_url,
-                  d.kennel_name,
+                  $1 as kennel_name,
                   b.name as breed_name,
-                  $1::UUID as breeder_id,
-                  $2::TEXT as breeder_name,
-                  $3::TEXT as email,
-                  $4::TEXT as phone,
-                  $5::TEXT as city,
-                  $6::TEXT as province,
+                  $2 as breeder_id,
+                  $3 as breeder_name,
+                  $4 as email,
+                  $5 as phone,
+                  $6 as city,
+                  $7 as province,
                   father.name as father_name,
                   father.registration_id as father_registration_id,
                   father.photo_url as father_photo_url,
@@ -343,9 +343,9 @@ const searchPublicPedigree = async (req, res) => {
            LEFT JOIN breeds b ON d.breed_id = b.id
            LEFT JOIN dogs father ON d.father_id = father.id
            LEFT JOIN dogs mother ON d.mother_id = mother.id
-           WHERE (d.owner_id = $1 OR d.breeder_id = $1)
+           WHERE (d.owner_id = $8 OR d.breeder_id = $9)
            ORDER BY d.created_at DESC`,
-          [kennelOwner.id, kennelOwner.full_name, kennelOwner.email, kennelOwner.phone, kennelOwner.city, kennelOwner.province]
+          [kennelOwner.kennel_name, kennelOwner.id, kennelOwner.full_name, kennelOwner.email, kennelOwner.phone, kennelOwner.city, kennelOwner.province, kennelOwner.id, kennelOwner.id]
         );
 
         allDogs.push(...dogsResult.rows);
@@ -395,7 +395,7 @@ const searchPublicPedigree = async (req, res) => {
     if (dog_name) {
       paramCount++;
       // Use case-insensitive search
-      query += ` AND d.name ILIKE '%' || $${paramCount} || '%'`;
+      query += ` AND LOWER(COALESCE(d.name, '')) LIKE '%' || LOWER($${paramCount}) || '%'`;
       params.push(dog_name);
     }
 
@@ -407,7 +407,7 @@ const searchPublicPedigree = async (req, res) => {
 
     if (breeder_name) {
       paramCount++;
-      query += ` AND u.full_name ILIKE '%' || $${paramCount} || '%'`;
+      query += ` AND LOWER(COALESCE(u.full_name, '')) LIKE '%' || LOWER($${paramCount}) || '%'`;
       params.push(breeder_name);
     }
 
